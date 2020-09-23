@@ -1,0 +1,26 @@
+xBRZ project is distributed under
+GNU General Public License: https://www.gnu.org/licenses/gpl-3.0
+Copyright (C) Zenju (zenju AT gmx DOT de) - All Rights Reserved
+
+Additionally and as a special exception, the author gives permission
+to link the code of this program with the following libraries
+(or with modified versions that use the same licenses), and distribute
+linked combinations including the two: MAME, FreeFileSync, Snes9x, ePSXe
+You must obey the GNU General Public License in all respects for all of
+the code used other than MAME, FreeFileSync, Snes9x, ePSXe.
+If you modify this file, you may extend this exception to your version
+of the file, but you are not obligated to do so. If you do not wish to
+do so, delete this exception statement from your version.
+
+Java port of xBRZ 1.8 by Stanio (stanio AT yahoo DOT com)
+
+As a special exception the author of this port gives you
+permission to link this library with independent modules to produce an
+executable, regardless of the license terms of these independent modules,
+and to copy and distribute the resulting executable under terms of your
+choice, provided that you also meet, for each linked independent module,
+the terms and conditions of the license of that module. An independent
+module is a module which is not derived from or based on this library.
+If you modify this library, you may extend this exception to your version
+of the library, but you are not obliged to do so. If you do not wish to
+do so, delete this exception statement from your version.
