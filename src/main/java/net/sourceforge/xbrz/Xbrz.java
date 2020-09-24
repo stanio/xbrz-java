@@ -17,9 +17,10 @@ public class Xbrz {
     }
 
 
-    Scaler scaler;
+    private Scaler scaler;
     private ScalerCfg cfg;
     private ColorDistance dist;
+    private boolean withAlpha;
 
     public Xbrz(int factor) {
         this(factor, true);
@@ -37,6 +38,11 @@ public class Xbrz {
         this.scaler = Scaler.forFactor(factor, withAlpha);
         this.cfg = cfg;
         this.dist = withAlpha ? ColorDistance.withAlpha(colorDistance) : colorDistance;
+        this.withAlpha = withAlpha;
+    }
+
+    public int scale() {
+        return scaler.scale();
     }
 
     private final double dist(int pix1, int pix2) { return dist.calc(pix1, pix2); }
@@ -161,7 +167,7 @@ public class Xbrz {
         int yLast = srcHeight;
 
         byte[] preProcBuf = new byte[srcWidth];
-        Kernel_4x4 ker4 = new Kernel_4x4(src, srcWidth, srcHeight);
+        Kernel_4x4 ker4 = new Kernel_4x4(src, srcWidth, srcHeight, withAlpha);
         OutputMatrix out = new OutputMatrix(scaler.scale(), trg, srcWidth * scaler.scale());
 
         //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending

@@ -12,15 +12,17 @@ public class ScalerTool {
         int srcWidth = source.getWidth();
         int srcHeight = source.getHeight();
         int[] srcPixels = new int[srcWidth * srcHeight];
+        boolean hasAlpha = source.getColorModel().hasAlpha();
         source.getRGB(0, 0, srcWidth, srcHeight, srcPixels, 0, srcWidth);
 
         int destWidth = srcWidth * factor;
         int destHeight = srcHeight * factor;
         int[] destPixels = new int[destWidth * destHeight];
-        //Xbrz.scaleImage(factor, source.getColorModel().hasAlpha(), inPixels, outPixels, width, height);
-        Xbrz.scaleImage(factor, true, srcPixels, destPixels, srcWidth, srcHeight);
+        Xbrz.scaleImage(factor, hasAlpha, srcPixels, destPixels, srcWidth, srcHeight);
 
-        BufferedImage dest = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage dest = new BufferedImage(destWidth, destHeight,
+                                               hasAlpha ? BufferedImage.TYPE_INT_ARGB
+                                                        : BufferedImage.TYPE_INT_RGB);
         dest.setRGB(0, 0, destWidth, destHeight, destPixels, 0, destWidth);
         return dest;
     }

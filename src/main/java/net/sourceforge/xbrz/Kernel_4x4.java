@@ -15,15 +15,6 @@ import static net.sourceforge.xbrz.RotationDegree.*;
 */
 final class Kernel_4x4 {
 
-    private final int[] src;
-    private final int srcWidth;
-    private final int srcHeight;
-
-    private int s_m1;
-    private int s_0;
-    private int s_p1;
-    private int s_p2;
-
     int
     a, b, c, //
     e, f, g, // support reinterpret_cast from Kernel_4x4 => Kernel_3x3
@@ -31,17 +22,29 @@ final class Kernel_4x4 {
     m, n, o,
     d, h, l, p;
 
-    Kernel_4x4(int[] src, int srcWidth, int srcHeight) {
+    private final int[] src;
+    private final int srcWidth;
+    private final int srcHeight;
+    private final boolean withAlpha;
+
+    private int s_m1;
+    private int s_0;
+    private int s_p1;
+    private int s_p2;
+
+    Kernel_4x4(int[] src, int srcWidth, int srcHeight, boolean withAlpha) {
         this.src = src;
         this.srcWidth = srcWidth;
         this.srcHeight = srcHeight;
+        this.withAlpha = withAlpha;
     }
 
     final void positionY(int y) {
-        s_m1 = 0 <= y - 1 && y - 1 < srcHeight ? srcWidth * (y - 1) : -1;
-        s_0  = 0 <= y     && y     < srcHeight ? srcWidth *  y      : -1;
-        s_p1 = 0 <= y + 1 && y + 1 < srcHeight ? srcWidth * (y + 1) : -1;
-        s_p2 = 0 <= y + 2 && y + 2 < srcHeight ? srcWidth * (y + 2) : -1;
+        if (withAlpha) {
+            positionYTransparent(y);
+        } else {
+            positionYDuplicate(y);
+        }
 
         readDhlp(-4); //hack: read a, e, i, m at x = -1
         a = d;
@@ -64,8 +67,34 @@ final class Kernel_4x4 {
         readDhlp(-1);
     }
 
+    private final void positionYTransparent(int y) {
+        s_m1 = 0 <= y - 1 && y - 1 < srcHeight ? srcWidth * (y - 1) : -1;
+        s_0  = 0 <= y     && y     < srcHeight ? srcWidth *  y      : -1;
+        s_p1 = 0 <= y + 1 && y + 1 < srcHeight ? srcWidth * (y + 1) : -1;
+        s_p2 = 0 <= y + 2 && y + 2 < srcHeight ? srcWidth * (y + 2) : -1;
+    }
+
+    private final void positionYDuplicate(int y) {
+        s_m1 = srcWidth * clamp(y - 1, 0, srcHeight - 1);
+        s_0  = srcWidth * clamp(y,     0, srcHeight - 1);
+        s_p1 = srcWidth * clamp(y + 1, 0, srcHeight - 1);
+        s_p2 = srcWidth * clamp(y + 2, 0, srcHeight - 1);
+    }
+
+    static int clamp(int v, int lo, int hi) {
+        return (v < lo) ? lo : (v > hi) ? hi : v;
+    }
+
     final void readDhlp(int x) //(x, y) is at kernel position F
     {
+        if (withAlpha) {
+            readDhlpTransparent(x);
+        } else {
+            readDhlpDuplicate(x);
+        }
+    }
+
+    private final void readDhlpTransparent(int x) {
         final int x_p2 = x + 2;
         if (0 <= x_p2 && x_p2 < srcWidth)
         {
@@ -81,6 +110,14 @@ final class Kernel_4x4 {
             l = 0;
             p = 0;
         }
+    }
+
+    private final void readDhlpDuplicate(int x) {
+        final int xc_p2 = clamp(x + 2, 0, srcWidth - 1);
+        d = src[s_m1 + xc_p2];
+        h = src[s_0  + xc_p2];
+        l = src[s_p1 + xc_p2];
+        p = src[s_p2 + xc_p2];
     }
 
     final void shift() {
