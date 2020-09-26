@@ -1,30 +1,60 @@
 package net.sourceforge.xbrz.tool;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
+import java.awt.image.SampleModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 import net.sourceforge.xbrz.Xbrz;
 
 public class ScalerTool {
 
+    private static class ImageData {
+        final int width;
+        final int height;
+        final int[] pixels;
+        final boolean hasAlpha;
+        ImageData(BufferedImage image) {
+            width = image.getWidth();
+            height = image.getHeight();
+            pixels = new int[width * height];
+            hasAlpha = image.getColorModel().hasAlpha();
+            image.getRGB(0, 0, width, height, pixels, 0, width);
+        }
+    }
+
     public static BufferedImage scaleImage(BufferedImage source, int factor) {
-        int srcWidth = source.getWidth();
-        int srcHeight = source.getHeight();
-        int[] srcPixels = new int[srcWidth * srcHeight];
-        boolean hasAlpha = source.getColorModel().hasAlpha();
-        source.getRGB(0, 0, srcWidth, srcHeight, srcPixels, 0, srcWidth);
+        return scaleImage(new ImageData(source), factor);
+    }
 
-        int destWidth = srcWidth * factor;
-        int destHeight = srcHeight * factor;
+    private static BufferedImage scaleImage(File source, int factor) throws IOException {
+        ImageData sourceData = new ImageData(ImageIO.read(source));
+        return scaleImage(sourceData, factor);
+    }
+
+    private static BufferedImage scaleImage(ImageData source, int factor) {
+        int destWidth = source.width * factor;
+        int destHeight = source.height * factor;
         int[] destPixels = new int[destWidth * destHeight];
-        Xbrz.scaleImage(factor, hasAlpha, srcPixels, destPixels, srcWidth, srcHeight);
+        Xbrz.scaleImage(factor, source.hasAlpha, source.pixels, destPixels, source.width, source.height);
+        return makeImage(destPixels, destWidth, destHeight, source.hasAlpha);
+    }
 
-        BufferedImage dest = new BufferedImage(destWidth, destHeight,
-                                               hasAlpha ? BufferedImage.TYPE_INT_ARGB
-                                                        : BufferedImage.TYPE_INT_RGB);
-        dest.setRGB(0, 0, destWidth, destHeight, destPixels, 0, destWidth);
-        return dest;
+    private static BufferedImage makeImage(int[] pixels, int width, int height, boolean hasAlpha) {
+        DataBufferInt dataBuffer = new DataBufferInt(pixels, pixels.length);
+        DirectColorModel colorModel = new DirectColorModel(hasAlpha ? 32 : 24,
+                                                           0x00FF0000,
+                                                           0x0000FF00,
+                                                           0x000000FF,
+                                                           hasAlpha ? 0xFF000000 : 0);
+        SampleModel sampleModel = colorModel.createCompatibleSampleModel(width, height);
+        WritableRaster raster = WritableRaster.createWritableRaster(sampleModel, dataBuffer, null);
+        return new BufferedImage(colorModel, raster, false, null);
     }
 
     public static void main(String[] args) throws Exception {
@@ -42,10 +72,9 @@ public class ScalerTool {
                 System.exit(2);
             }
         }
-        BufferedImage source = ImageIO.read(new File(args[0]));
-        BufferedImage scaled = scaleImage(source, factor);
-        String target = args[0].replaceFirst("((?<!^|[/\\\\])\\.[^.]+)?$", "@" + factor + "x.png");
-        ImageIO.write(scaled, "png", new File(target));
+        String source = args[0];
+        String target = source.replaceFirst("((?<!^|[/\\\\])\\.[^.]+)?$", "@" + factor + "x.png");
+        ImageIO.write(scaleImage(new File(source), factor), "png", new File(target));
         System.out.println(target);
     }
 
