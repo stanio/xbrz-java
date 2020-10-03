@@ -6,82 +6,34 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.sourceforge.xbrz</groupId>
-    <artifactId>xbrz</artifactId>
+    <artifactId>xbrz-reactor</artifactId>
     <version>1.8.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-    <name>xBRZ</name>
-    <url>https://github.com/stanio/xbrz-java</url>
-    <licenses>
-        <license>
-            <name>GNU General Public License v3</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0</url>
-            <comments>Classpath Exception</comments>
-        </license>
-    </licenses>
+    <name>xBRZ Reactor</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>xbrz-lib</module>
+        <module>xbrz-tool</module>
+    </modules>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>${basedir}</directory>
-                <includes>
-                    <include>LICENSE</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>net.sourceforge.xbrz.tool.ScalerTool</mainClass>
-                        </manifest>
-                    </archive>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
