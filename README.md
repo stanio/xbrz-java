@@ -13,6 +13,7 @@ Java port of xBRZ 1.8 by Stanio.
         BufferedImage source = ....;
         int srcWidth = source.getWidth();
         int srcHeight = source.getHeight();
+        boolean hasAlpha = source.getColorModel().hasAlpha();
         int[] srcPixels = new int[srcWidth * srcHeight];
         source.getRGB(0, 0, srcWidth, srcHeight, srcPixels, 0, srcWidth);
         
@@ -20,9 +21,11 @@ Java port of xBRZ 1.8 by Stanio.
         int destWidth = srcWidth * factor;
         int destHeight = srcHeight * factor;
         int[] destPixels = new int[destWidth * destHeight];
-        Xbrz.scaleImage(factor, true, srcPixels, destPixels, srcWidth, srcHeight);
+        Xbrz.scaleImage(factor, hasAlpha, srcPixels, destPixels, srcWidth, srcHeight);
         
-        BufferedImage scaled = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage scaled = new BufferedImage(destWidth, destHeight,
+                                                 hasAlpha ? BufferedImage.TYPE_INT_ARGB
+                                                          : BufferedImage.TYPE_INT_RGB);
         scaled.setRGB(0, 0, destWidth, destHeight, destPixels, 0, destWidth);
 
 ### Maven
