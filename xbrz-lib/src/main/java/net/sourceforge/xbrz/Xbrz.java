@@ -159,9 +159,13 @@ public class Xbrz {
         }
     }
 
-    public void scaleImage(int[] src, int[] trg, int srcWidth, int srcHeight) {
+    public int[] scaleImage(int[] src, int[] trg, int srcWidth, int srcHeight) {
         int yFirst = 0;
         int yLast = srcHeight;
+
+        if (trg == null) {
+            trg = new int[srcWidth * scale() * srcHeight * scale()];
+        }
 
         byte[] preProcBuf = new byte[srcWidth];
         Kernel_4x4 ker4 = new Kernel_4x4(src, srcWidth, srcHeight, withAlpha);
@@ -245,10 +249,11 @@ public class Xbrz {
                 }
             }
         }
+        return trg;
     }
 
-    public static void scaleImage(int factor, boolean hasAlpha, int[] src, int[] trg, int srcWidth, int srcHeight) {
-        new Xbrz(factor, hasAlpha).scaleImage(src, trg, srcWidth, srcHeight);
+    public static int[] scaleImage(int factor, boolean hasAlpha, int[] src, int[] trg, int srcWidth, int srcHeight) {
+        return new Xbrz(factor, hasAlpha).scaleImage(src, trg, srcWidth, srcHeight);
     }
 
 }
