@@ -17,10 +17,10 @@ public class Xbrz {
     }
 
 
-    private Scaler scaler;
-    private ScalerCfg cfg;
-    private ColorDistance dist;
-    private boolean withAlpha;
+    private final Scaler scaler;
+    private final ScalerCfg cfg;
+    private final ColorDistance dist;
+    private final boolean withAlpha;
 
     public Xbrz(int factor) {
         this(factor, true);
@@ -49,8 +49,6 @@ public class Xbrz {
 
     private final boolean eq(int pix1, int pix2) { return dist(pix1, pix2) < cfg.equalColorTolerance; }
 
-    private final BlendResult preProcessCornersResult = new BlendResult();
-
     /* detect blend direction
 
     preprocessing blend result:
@@ -59,14 +57,14 @@ public class Xbrz {
     |---+---|   current input pixel is at position F
     | J | K |
     ---------   F, G, J, K corners of "BlendType" */
-    private BlendResult preProcessCorners(Kernel_4x4 ker) {
-        BlendResult result = preProcessCornersResult.reset();
+    private void preProcessCorners(Kernel_4x4 ker, BlendResult result) {
+        result.reset();
 
         if ((ker.f == ker.g &&
              ker.j == ker.k) ||
             (ker.f == ker.j &&
              ker.g == ker.k))
-            return result;
+            return;
 
         final double jg = dist(ker.i, ker.f) + dist(ker.f, ker.c) + dist(ker.n, ker.k) + dist(ker.k, ker.h) + cfg.centerDirectionBias * dist(ker.j, ker.g);
         final double fk = dist(ker.e, ker.j) + dist(ker.j, ker.o) + dist(ker.b, ker.g) + dist(ker.g, ker.l) + cfg.centerDirectionBias * dist(ker.f, ker.k);
@@ -89,7 +87,6 @@ public class Xbrz {
             if (ker.g != ker.f && ker.g != ker.k)
                 result.blend_g = dominantGradient ? BLEND_DOMINANT : BLEND_NORMAL;
         }
-        return result;
     }
 
     private final BlendInfo blendPixelInfo = new BlendInfo();
@@ -170,12 +167,14 @@ public class Xbrz {
         Kernel_4x4 ker4 = new Kernel_4x4(src, srcWidth, srcHeight, withAlpha);
         OutputMatrix out = new OutputMatrix(scaler.scale(), trg, srcWidth * scaler.scale());
 
+        final BlendResult res = new BlendResult();
+
         //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
         {
             ker4.positionY(yFirst - 1);
 
             {
-                final BlendResult res = preProcessCorners(ker4);
+                preProcessCorners(ker4, res);
                 clearAddTopL(preProcBuf, 0, res.blend_k); //set 1st known corner for (0, yFirst)
             }
 
@@ -184,7 +183,7 @@ public class Xbrz {
                 ker4.shift();     //shift previous kernel to the left
                 ker4.readDhlp(x); // (x, yFirst - 1) is at position F
 
-                final BlendResult res = preProcessCorners(ker4);
+                preProcessCorners(ker4, res);
                 addTopR(preProcBuf, x, res.blend_j); //set 2nd known corner for (x, yFirst)
 
                 if (x + 1 < srcWidth)
@@ -205,7 +204,7 @@ public class Xbrz {
 
             //corner blending for current (x, y + 1) position
             {
-                final BlendResult res = preProcessCorners(ker4);
+                preProcessCorners(ker4, res);
                 blend_xy1.clearAddTopL(res.blend_k); //set 1st known corner for (0, y + 1) and buffer for use on next column
 
                 addBottomL(preProcBuf, 0, res.blend_g); //set 3rd known corner for (0, y)
@@ -219,7 +218,7 @@ public class Xbrz {
                 //evaluate the four corners on bottom-right of current pixel
                 blend_xy.val = preProcBuf[x]; //for current (x, y) position
                 {
-                    final BlendResult res = preProcessCorners(ker4);
+                    preProcessCorners(ker4, res);
                     blend_xy.addBottomR(res.blend_f); //all four corners of (x, y) have been determined at this point due to processing sequence!
 
                     blend_xy1.addTopR(res.blend_j); //set 2nd known corner for (x, y + 1)

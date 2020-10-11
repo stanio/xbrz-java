@@ -32,9 +32,8 @@ final class BlendResult
     /**/blend_f, blend_g,
     /**/blend_j, blend_k;
 
-    final BlendResult reset() {
+    final void reset() {
         blend_f = blend_g = blend_j = blend_k = BLEND_NONE;
-        return this;
     }
 
     //@Override
