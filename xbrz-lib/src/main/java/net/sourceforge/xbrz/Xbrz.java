@@ -4,6 +4,32 @@ import static net.sourceforge.xbrz.BlendInfo.*;
 import static net.sourceforge.xbrz.BlendType.*;
 import static net.sourceforge.xbrz.RotationDegree.*;
 
+/**
+ * Defines the main API for xBRZ scaling.  Instances are configured with specific
+ * scale factor, color blending type (alpha vs. no alpha) and color distance
+ * calculation.  A single instance could be used to scale multiple images
+ * concurrently.
+ * <p>
+ * <em>Sample usage:</em></p>
+ * <pre>
+ * import java.awt.image.BufferedImage;
+ *
+ *     BufferedImage source = ...;
+ *     int srcWidth = source.getWidth();
+ *     int srcHeight = source.getHeight();
+ *     int[] srcPixels = source.getRGB(0, 0, srcWidth, srcHeight, null, 0, srcWidth);
+ *
+ *     int factor = 2;
+ *     int destWidth = srcWidth * factor;
+ *     int destHeight = srcHeight * factor;
+ *     boolean hasAlpha = source.getColorModel().hasAlpha();
+ *     int[] destPixels = Xbrz.scaleImage(factor, hasAlpha, srcPixels, null, srcWidth, srcHeight);
+ *
+ *     BufferedImage scaled = new BufferedImage(destWidth, destHeight,
+ *                                              hasAlpha ? BufferedImage.TYPE_INT_ARGB
+ *                                                       : BufferedImage.TYPE_INT_RGB);
+ *     scaled.setRGB(0, 0, destWidth, destHeight, destPixels, 0, destWidth);</pre>
+ */
 public class Xbrz {
 
 
