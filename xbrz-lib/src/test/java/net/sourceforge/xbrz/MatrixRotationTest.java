@@ -12,7 +12,7 @@ public class MatrixRotationTest {
 
     @BeforeClass
     public static void setUpSuite() {
-        m4x4 = new MatrixRotation(4);
+        m4x4 = MatrixRotation.of(4);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class MatrixRotationTest {
     @Test
     public void matrix3rotation270() throws Exception {
         final int N = 3;
-        MatrixRotation m3x3 = new MatrixRotation(N);
+        MatrixRotation m3x3 = MatrixRotation.of(N);
         final RotationDegree rot270 = RotationDegree.ROT_270;
         int[] expected = new int[] {
             0x2, 0x12, 0x22,

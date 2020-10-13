@@ -18,7 +18,7 @@ final class OutputMatrix {
         this.N = N;
         this.out = out;
         this.outWidth = outWidth;
-        this.rot = new MatrixRotation(N);
+        this.rot = MatrixRotation.of(N);
     }
 
     final void positionY(int y) {
@@ -76,7 +76,7 @@ final class MatrixRotation {
     private final int Nsq;
     private final byte[] lookup;
 
-    MatrixRotation(int N) {
+    private MatrixRotation(int N) {
         this.N = N;
         this.Nsq = N * N;
         if (N > 16) {
@@ -94,6 +94,10 @@ final class MatrixRotation {
             }
         }
         this.lookup = lookup;
+    }
+
+    static MatrixRotation of(int N) {
+        return new MatrixRotation(N);
     }
 
     private final byte calc(int rotDeg, byte IJ) {
