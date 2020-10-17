@@ -83,11 +83,17 @@ public final class AwtXbrz {
 
     public static Image scaleImage(Image source, int factor) {
         ImageData imageData = ImageData.get(source);
+        // REVISIT: Maybe use java.awt.image.MemoryImageSource to produce animated
+        // images (would need extra source info like frame "delayTime", and maybe
+        // "disposalMethod"?), or signal with an exception.
         return (imageData == null) ? source : scaleImage(imageData, factor);
     }
 
     public static Image scaleImage(Image source, int targetWidth, int targetHeight) {
         ImageData imageData = ImageData.get(source);
+        // REVISIT: Maybe use java.awt.image.MemoryImageSource to produce animated
+        // images (would need extra source info like frame "delayTime", and maybe
+        // "disposalMethod"?), or signal with an exception.
         if (imageData == null) {
             return source;
         }
