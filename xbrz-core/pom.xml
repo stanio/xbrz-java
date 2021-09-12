@@ -6,10 +6,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.sourceforge.xbrz</groupId>
-    <artifactId>xbrz-lib</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <artifactId>xbrz-core</artifactId>
+    <version>1.8</version>
 
-    <name>xBRZ Library</name>
+    <name>xBRZ 1.8</name>
     <url>https://github.com/stanio/xbrz-java</url>
     <licenses>
         <license>

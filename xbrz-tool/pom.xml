@@ -7,9 +7,17 @@
 
     <groupId>net.sourceforge.xbrz</groupId>
     <artifactId>xbrz-tool</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <version>1.8</version>
 
-    <name>xBRZ Tool</name>
+    <name>Scaler Tool</name>
+    <url>https://github.com/stanio/xbrz-java</url>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0</url>
+            <comments>Classpath Exception</comments>
+        </license>
+    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,8 +29,8 @@
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.xbrz</groupId>
-            <artifactId>xbrz-lib</artifactId>
-            <version>1.8.1-SNAPSHOT</version>
+            <artifactId>xbrz-core</artifactId>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -67,20 +75,6 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <configuration>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

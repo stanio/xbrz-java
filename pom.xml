@@ -6,14 +6,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.sourceforge.xbrz</groupId>
-    <artifactId>xbrz-reactor</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <artifactId>xbrz-java</artifactId>
+    <version>1.8</version>
     <packaging>pom</packaging>
 
-    <name>xBRZ Reactor</name>
+    <name>Build Reactor</name>
 
     <modules>
-        <module>xbrz-lib</module>
+        <module>xbrz-core</module>
         <module>xbrz-tool</module>
     </modules>
 
