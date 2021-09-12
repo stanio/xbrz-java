@@ -7,6 +7,8 @@ import java.awt.image.PixelGrabber;
 
 public final class ImageData {
 
+    private static final int[] ANIMATED_PIXELS = new int[0];
+
     public final int width;
     public final int height;
     public final boolean hasAlpha;
@@ -23,7 +25,9 @@ public final class ImageData {
         width = image.getWidth();
         height = image.getHeight();
         hasAlpha = image.getColorModel().hasAlpha();
-        pixels = (int[]) image.getPixels();
+        pixels = (image.getStatus() & ImageObserver.ALLBITS) != 0
+                 ? (int[]) image.getPixels()
+                 : ANIMATED_PIXELS;
     }
 
     ImageData(ImageData source, int factor) {
@@ -40,21 +44,19 @@ public final class ImageData {
 
         PixelGrabber grabber = new PixelGrabber(image, 0, 0, -1, -1, true);
         try {
-            grabber.grabPixels();
-        } catch (InterruptedException e) {
+            grabber.grabPixels(60_000L);
+            final int successBits = ImageObserver.ALLBITS | ImageObserver.FRAMEBITS;
+            if ((grabber.getStatus() & successBits) != 0) {
+                return new ImageData(grabber);
+            }
+        } catch (@SuppressWarnings("unused") InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.err.println("ImageData.get: " + e);
-            return null;
         }
-        if ((grabber.getStatus() & ImageObserver.ABORT) != 0) {
-            System.err.println("ImageData.get: fetch aborted or errored");
-            return null;
-        }
-        if ((grabber.getStatus() & ImageObserver.FRAMEBITS) != 0) {
-            // No support for animated images.
-            return null;
-        }
-        return new ImageData(grabber);
+        return null;
+    }
+
+    public boolean isAnimated() {
+        return pixels == ANIMATED_PIXELS;
     }
 
 }
