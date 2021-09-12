@@ -81,7 +81,8 @@ public abstract class AbstractScalerTest {
         new Xbrz(factor, false).scaleImage(srcPixels, dest2Pixels, srcWidth, srcHeight);
 
         // Differences on image borders expected.
-        assertPixels(testName.getMethodName(), destPixels, dest2Pixels, 1.0);
+        assertPixels(testName.getMethodName()
+                + "-" + factor + "x", destPixels, dest2Pixels, 1.0);
     }
 
     private void testImage(String name) throws IOException {
@@ -109,7 +110,8 @@ public abstract class AbstractScalerTest {
         BufferedImage reference = ImageIO.read(AbstractScalerTest.class.getResource(imageName + "@" + factor + "xbrz.png"));
         int[] refPixels = new int[reference.getWidth() * reference.getHeight()];
         reference.getRGB(0, 0, reference.getWidth(), reference.getHeight(), refPixels, 0, reference.getWidth());
-        assertPixels(testName.getMethodName(), destPixels, refPixels, deviation);
+        assertPixels(testName.getMethodName()
+                + "-" + factor + "x", destPixels, refPixels, deviation);
     }
 
     private static void assertPixels(String name, int[] destPixels, int[] refPixels, double deviation) {
