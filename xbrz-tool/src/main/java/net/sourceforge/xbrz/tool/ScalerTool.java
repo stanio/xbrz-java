@@ -15,8 +15,20 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import net.sourceforge.xbrz.awt.AwtXbrz;
+import net.sourceforge.xbrz.awt.ImageData;
+
 /**
  * Provides command-line entry point for using xBRZ.
+ * <p>
+ * <b>REVISIT:</b></p>
+ * <ul>
+ * <li>Enhance command-line interface with <a href="https://picocli.info/">picocli</a>;</li>
+ * <li>Create <a href="https://www.graalvm.org/reference-manual/native-image/">GraalVM
+ *   Native Image</a> packages(s);</li>
+ * <li>See also: <a href="https://picocli.info/#_packaging_your_application">Packaging
+ *   Your Application</a> (picocli)</li>
+ * </ul>
  */
 public class ScalerTool {
 
@@ -111,7 +123,7 @@ public class ScalerTool {
         @Override
         public BufferedImage next() {
             if (hasNext()) {
-                ImageData sourceData = new ImageData(nextImage);
+                ImageData sourceData = ImageData.get(nextImage);
                 nextImage = null;
                 return AwtXbrz.scaleImage(sourceData, factor);
             }

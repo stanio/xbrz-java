@@ -1,4 +1,4 @@
-package net.sourceforge.xbrz.tool;
+package net.sourceforge.xbrz.awt;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -16,8 +16,7 @@ public final class ImageData {
         width = image.getWidth();
         height = image.getHeight();
         hasAlpha = image.getColorModel().hasAlpha();
-        pixels = new int[width * height];
-        image.getRGB(0, 0, width, height, pixels, 0, width);
+        pixels = image.getRGB(0, 0, width, height, null, 0, width);
     }
 
     ImageData(PixelGrabber image) {
