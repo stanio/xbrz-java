@@ -1,13 +1,21 @@
 package net.sourceforge.xbrz.awt;
 
 import java.awt.Image;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DirectColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
+import java.awt.image.Raster;
 
 public final class ImageData {
 
     private static final int[] ANIMATED_PIXELS = new int[0];
+
+    private static final ColorSpace CS_LINEAR_RGB =
+            ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB);
 
     public final int width;
     public final int height;
@@ -18,7 +26,7 @@ public final class ImageData {
         width = image.getWidth();
         height = image.getHeight();
         hasAlpha = image.getColorModel().hasAlpha();
-        pixels = image.getRGB(0, 0, width, height, null, 0, width);
+        pixels = getRGB(image);
     }
 
     ImageData(PixelGrabber image) {
@@ -35,6 +43,21 @@ public final class ImageData {
         height = source.height * factor;
         hasAlpha = source.hasAlpha;
         pixels = new int[width * height];
+    }
+
+    private static int[] getRGB(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        Raster raster = image.getRaster();
+        int transferType = raster.getTransferType();
+        ColorModel colorModel = image.getColorModel();
+        ColorSpace colorSpace = colorModel.getColorSpace();
+        if (colorModel instanceof DirectColorModel
+                && transferType == DataBuffer.TYPE_INT
+                && (colorSpace.isCS_sRGB() || colorSpace == CS_LINEAR_RGB)) {
+            return (int[]) raster.getDataElements(0, 0, width, height, null);
+        }
+        return image.getRGB(0, 0, width, height, null, 0, width);
     }
 
     public static ImageData get(Image image) {
