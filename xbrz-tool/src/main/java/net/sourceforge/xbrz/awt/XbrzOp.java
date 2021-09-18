@@ -61,7 +61,10 @@ public class XbrzOp implements BufferedImageOp {
         if (src == dst) {
             throw new IllegalArgumentException("src image cannot be the same as the dst image");
         }
+        return filter(ImageData.get(src), dst);
+    }
 
+    BufferedImage filter(ImageData src, BufferedImage dst) {
         BufferedImage xbrz = AwtXbrz.scaleImage(src, factor);
         if (dst == null) {
             return AwtXbrz.makeTracked(xbrz);

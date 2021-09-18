@@ -5,10 +5,12 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferInt;
 import java.awt.image.DirectColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class ImageData {
@@ -98,5 +100,53 @@ public final class ImageData {
     public boolean isAnimated() {
         return pixels == ANIMATED_PIXELS;
     }
+
+    public Key getKey() {
+        return new Key(width, height, hasAlpha, pixels);
+    }
+
+    public static final class Key {
+
+        private final int width;
+        private final int height;
+        private final boolean hasAlpha;
+        private final int pixelDigest;
+        private final int hashCode;
+
+        Key(int width, int height, boolean hasAlpha, int[] pixels) {
+            this.width = width;
+            this.height = height;
+            this.hasAlpha = hasAlpha;
+            this.pixelDigest = Arrays.hashCode(pixels);
+            this.hashCode = Arrays.hashCode(new int[] {
+                width, height, Boolean.hashCode(hasAlpha), pixelDigest
+            });
+        }
+
+        @Override
+        public int hashCode() {
+            return hashCode;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Key) {
+                Key other = (Key) obj;
+                return pixelDigest == other.pixelDigest
+                        && width == other.width
+                        && height == other.height
+                        && hasAlpha == other.hasAlpha;
+            }
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return "Key [width=" + width + ", height=" + height
+                    + ", hasAlpha=" + hasAlpha + ", pixelDigest=" + pixelDigest + "]";
+        }
+
+    }
+
 
 }

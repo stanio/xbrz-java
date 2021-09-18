@@ -57,7 +57,8 @@ public final class AwtXbrz {
     }
 
     private static Image makeFiltered(Image base, int factor) {
-        BufferedImageFilter xbrzFilter = new BufferedImageFilter(new XbrzOp(factor));
+        //BufferedImageFilter xbrzFilter = new BufferedImageFilter(new XbrzOp(factor));
+        BufferedImageFilter xbrzFilter = new BufferedImageFilter(new CachingXbrzOp(factor));
         return Toolkit.getDefaultToolkit()
                 .createImage(new FilteredImageSource(base.getSource(), xbrzFilter));
     }
