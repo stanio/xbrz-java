@@ -45,7 +45,10 @@ public class XbrzOp implements BufferedImageOp {
     public BufferedImage createCompatibleDestImage(BufferedImage src, ColorModel destCM) {
         Rectangle bounds = getBounds2D(src).getBounds();
         if (destCM == null) {
-            return new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_ARGB);
+            return new BufferedImage(bounds.width, bounds.height,
+                                     src.getColorModel().hasAlpha()
+                                     ? BufferedImage.TYPE_INT_ARGB
+                                     : BufferedImage.TYPE_INT_RGB);
         }
         return new BufferedImage(destCM,
                 destCM.createCompatibleWritableRaster(bounds.width, bounds.height),
