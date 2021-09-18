@@ -12,19 +12,27 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorModel;
+import java.awt.image.DataBufferInt;
 import java.util.Objects;
 
 public class XbrzOp implements BufferedImageOp {
 
     private final int factor;
 
+    private final RenderingHints hints;
+
     public XbrzOp(int factor) {
+        this(factor, null);
+    }
+
+    public XbrzOp(int factor, RenderingHints hints) {
         this.factor = factor;
+        this.hints = hints;
     }
 
     @Override
     public RenderingHints getRenderingHints() {
-        return null;
+        return hints;
     }
 
     @Override
@@ -70,11 +78,19 @@ public class XbrzOp implements BufferedImageOp {
             return AwtXbrz.makeTracked(xbrz);
         }
 
-        Graphics2D g = dst.createGraphics();
-        try {
-            g.drawImage(xbrz, 0, 0, null);
-        } finally {
-            g.dispose();
+        if (hints == null) {
+            int[] rgb = ((DataBufferInt) xbrz.getRaster().getDataBuffer()).getData();
+            int w = Math.min(xbrz.getWidth(), dst.getWidth());
+            int h = Math.min(xbrz.getHeight(), dst.getHeight());
+            dst.setRGB(0, 0, w, h, rgb, 0, xbrz.getWidth());
+        } else {
+            Graphics2D g = dst.createGraphics();
+            try {
+                g.setRenderingHints(hints);
+                g.drawImage(xbrz, 0, 0, null);
+            } finally {
+                g.dispose();
+            }
         }
         return dst;
     }
