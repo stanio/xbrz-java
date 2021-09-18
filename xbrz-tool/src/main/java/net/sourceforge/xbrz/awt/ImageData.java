@@ -9,6 +9,7 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class ImageData {
 
@@ -29,10 +30,11 @@ public final class ImageData {
         pixels = getRGB(image);
     }
 
-    ImageData(PixelGrabber image) {
+    ImageData(PixelGrabber image, boolean transparency) {
         width = image.getWidth();
         height = image.getHeight();
-        hasAlpha = image.getColorModel().hasAlpha();
+        //hasAlpha = image.getColorModel().hasAlpha();
+        hasAlpha = transparency;
         pixels = (image.getStatus() & ImageObserver.ALLBITS) != 0
                  ? (int[]) image.getPixels()
                  : ANIMATED_PIXELS;
@@ -65,12 +67,20 @@ public final class ImageData {
             return new ImageData((BufferedImage) image);
         }
 
-        PixelGrabber grabber = new PixelGrabber(image, 0, 0, -1, -1, true);
+        AtomicBoolean hasAlpha = new AtomicBoolean();
+        PixelGrabber grabber = new PixelGrabber(image, 0, 0, -1, -1, true) {
+            @Override public void setColorModel(ColorModel model) {
+                super.setColorModel(model);
+                if (model.hasAlpha()) {
+                    hasAlpha.set(true);
+                }
+            }
+        };
         try {
             grabber.grabPixels(60_000L);
             final int successBits = ImageObserver.ALLBITS | ImageObserver.FRAMEBITS;
             if ((grabber.getStatus() & successBits) != 0) {
-                return new ImageData(grabber);
+                return new ImageData(grabber, hasAlpha.get());
             }
         } catch (@SuppressWarnings("unused") InterruptedException e) {
             Thread.currentThread().interrupt();
