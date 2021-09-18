@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageFilter;
 import java.awt.image.ColorModel;
+import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferInt;
 import java.awt.image.DirectColorModel;
 import java.awt.image.FilteredImageSource;
@@ -32,6 +33,23 @@ public final class AwtXbrz {
 
     private static BufferedImage makeImage(int[] pixels, int width, int height, boolean hasAlpha) {
         DataBufferInt dataBuffer = new DataBufferInt(pixels, pixels.length);
+        return makeImage(dataBuffer, width, height, hasAlpha);
+    }
+
+    static BufferedImage makeTracked(BufferedImage source) {
+        int[] pixels = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
+        return makeTracked(pixels, source.getWidth(), source.getHeight(), source.getColorModel().hasAlpha());
+    }
+
+    private static BufferedImage makeTracked(int[] pixels, int width, int height, boolean hasAlpha) {
+        DataBufferInt dataBuffer = new DataBufferInt(pixels.length);
+        for (int i = 0, len = pixels.length; i < len; i++) {
+            dataBuffer.setElem(i, pixels[i]);
+        }
+        return makeImage(dataBuffer, width, height, hasAlpha);
+    }
+
+    private static BufferedImage makeImage(DataBuffer dataBuffer, int width, int height, boolean hasAlpha) {
         ColorModel colorModel = hasAlpha ? ColorModel.getRGBdefault() : RGB_OPAQUE;
         SampleModel sampleModel = colorModel.createCompatibleSampleModel(width, height);
         WritableRaster raster = WritableRaster.createWritableRaster(sampleModel, dataBuffer, null);

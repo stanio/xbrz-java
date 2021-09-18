@@ -124,6 +124,7 @@ public class ScalerTool {
         public BufferedImage next() {
             if (hasNext()) {
                 ImageData sourceData = ImageData.get(nextImage);
+                //ImageData sourceData = new ImageData(nextImage, true);
                 nextImage = null;
                 return AwtXbrz.scaleImage(sourceData, factor);
             }

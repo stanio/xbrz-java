@@ -24,10 +24,14 @@ public final class ImageData {
     final int[] pixels;
 
     ImageData(BufferedImage image) {
+        this(image, false);
+    }
+
+    ImageData(BufferedImage image, boolean untracked) {
         width = image.getWidth();
         height = image.getHeight();
         hasAlpha = image.getColorModel().hasAlpha();
-        pixels = getRGB(image);
+        pixels = getRGB(image, untracked);
     }
 
     ImageData(PixelGrabber image, boolean transparency) {
@@ -47,7 +51,7 @@ public final class ImageData {
         pixels = new int[width * height];
     }
 
-    private static int[] getRGB(BufferedImage image) {
+    private static int[] getRGB(BufferedImage image, boolean untracked) {
         int width = image.getWidth();
         int height = image.getHeight();
         Raster raster = image.getRaster();
@@ -57,6 +61,9 @@ public final class ImageData {
         if (colorModel instanceof DirectColorModel
                 && transferType == DataBuffer.TYPE_INT
                 && (colorSpace.isCS_sRGB() || colorSpace == CS_LINEAR_RGB)) {
+            if (untracked && raster.getDataBuffer().getNumBanks() == 1) {
+                return ((DataBufferInt) raster.getDataBuffer()).getData();
+            }
             return (int[]) raster.getDataElements(0, 0, width, height, null);
         }
         return image.getRGB(0, 0, width, height, null, 0, width);

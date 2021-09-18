@@ -64,7 +64,7 @@ public class XbrzOp implements BufferedImageOp {
 
         BufferedImage xbrz = AwtXbrz.scaleImage(src, factor);
         if (dst == null) {
-            return xbrz;
+            return AwtXbrz.makeTracked(xbrz);
         }
 
         Graphics2D g = dst.createGraphics();
