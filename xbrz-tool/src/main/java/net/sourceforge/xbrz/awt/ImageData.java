@@ -20,6 +20,8 @@ public final class ImageData {
     private static final ColorSpace CS_LINEAR_RGB =
             ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB);
 
+    private static final boolean DEBUG = false;
+
     public final int width;
     public final int height;
     public final boolean hasAlpha;
@@ -76,23 +78,45 @@ public final class ImageData {
             return new ImageData((BufferedImage) image);
         }
 
-        AtomicBoolean hasAlpha = new AtomicBoolean();
+        AtomicBoolean hasTranslucency = new AtomicBoolean();
         PixelGrabber grabber = new PixelGrabber(image, 0, 0, -1, -1, true) {
-            @Override public void setColorModel(ColorModel model) {
-                super.setColorModel(model);
-                if (model.hasAlpha()) {
-                    hasAlpha.set(true);
+            @Override public void setPixels(int srcX, int srcY, int srcW, int srcH,
+                    ColorModel model, byte[] pixels, int srcOff, int srcScan) {
+                super.setPixels(srcX, srcY, srcW, srcH, model, pixels, srcOff, srcScan);
+                if (model.hasAlpha() && !hasTranslucency.get()) {
+                    for (int i = 0, len = pixels.length; i < len; i++) {
+                        if (model.getAlpha(pixels[i] & 0xFF) < 255) {
+                            hasTranslucency.set(true);
+                            break;
+                        }
+                    }
+                }
+            }
+            @Override public void setPixels(int srcX, int srcY, int srcW, int srcH,
+                    ColorModel model, int[] pixels, int srcOff, int srcScan) {
+                super.setPixels(srcX, srcY, srcW, srcH, model, pixels, srcOff, srcScan);
+                if (model.hasAlpha() && !hasTranslucency.get()) {
+                    for (int i = 0, len = pixels.length; i < len; i++) {
+                        if (model.getAlpha(pixels[i]) < 255) {
+                            hasTranslucency.set(true);
+                            break;
+                        }
+                    }
                 }
             }
         };
         try {
-            grabber.grabPixels(60_000L);
-            final int successBits = ImageObserver.ALLBITS | ImageObserver.FRAMEBITS;
-            if ((grabber.getStatus() & successBits) != 0) {
-                return new ImageData(grabber, hasAlpha.get());
+            if (grabber.grabPixels(60_000L)) {
+                return new ImageData(grabber, hasTranslucency.get());
             }
-        } catch (@SuppressWarnings("unused") InterruptedException e) {
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            if (DEBUG) {
+                e.printStackTrace();
+            }
+        }
+        if (DEBUG) {
+            System.out.println("Pixel grabber status: " + grabber.getStatus());
         }
         return null;
     }
