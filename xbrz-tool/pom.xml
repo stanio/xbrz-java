@@ -13,9 +13,7 @@
     <url>https://github.com/stanio/xbrz-java</url>
     <licenses>
         <license>
-            <name>GNU General Public License v3</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0</url>
-            <comments>Classpath Exception</comments>
+            <name>Public Domain</name>
         </license>
     </licenses>
 
@@ -29,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.xbrz</groupId>
-            <artifactId>xbrz-core</artifactId>
+            <artifactId>xbrz-awt</artifactId>
             <version>1.8</version>
         </dependency>
         <dependency>
