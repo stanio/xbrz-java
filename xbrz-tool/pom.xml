@@ -50,7 +50,7 @@
                     <finalName>${project.artifactId}</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>net.sourceforge.xbrz.tool.ScalerTool</mainClass>
+                            <mainClass>com.github.stanio.xbrz.tool.ScalerTool</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
