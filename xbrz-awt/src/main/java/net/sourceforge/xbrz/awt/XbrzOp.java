@@ -21,12 +21,19 @@ public class XbrzOp implements BufferedImageOp {
 
     private final RenderingHints hints;
 
+    private final boolean directBuffer;
+
     public XbrzOp(int factor) {
         this(factor, null);
     }
 
     public XbrzOp(int factor, RenderingHints hints) {
+        this(factor, false, hints);
+    }
+
+    XbrzOp(int factor, boolean direct, RenderingHints hints) {
         this.factor = factor;
+        this.directBuffer = direct;
         this.hints = hints;
     }
 
@@ -44,9 +51,8 @@ public class XbrzOp implements BufferedImageOp {
 
     @Override
     public Rectangle2D getBounds2D(BufferedImage src) {
-        Point2D bottomRight = new Point2D.Double(src.getWidth(), src.getHeight());
-        getPoint2D(bottomRight, bottomRight);
-        return new Rectangle2D.Double(0, 0, bottomRight.getX(), bottomRight.getY());
+        return new Rectangle2D.Double(0, 0, (double) src.getWidth() * factor,
+                                            (double) src.getHeight() * factor);
     }
 
     @Override
@@ -69,13 +75,13 @@ public class XbrzOp implements BufferedImageOp {
         if (src == dst) {
             throw new IllegalArgumentException("src image cannot be the same as the dst image");
         }
-        return filter(ImageData.get(src), dst);
+        return filter(new ImageData(src, directBuffer), dst);
     }
 
     BufferedImage filter(ImageData src, BufferedImage dst) {
-        BufferedImage xbrz = AwtXbrz.scaleImage(src, factor);
+        BufferedImage xbrz = AwtXbrz.scaleImage(src, factor, directBuffer);
         if (dst == null) {
-            return AwtXbrz.makeTracked(xbrz);
+            return xbrz;
         }
 
         if (hints == null) {
