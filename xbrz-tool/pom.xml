@@ -5,36 +5,20 @@
                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.sourceforge.xbrz</groupId>
+    <parent>
+        <groupId>com.github.stanio</groupId>
+        <artifactId>xbrz-java</artifactId>
+        <version>1.8.0</version>
+    </parent>
     <artifactId>xbrz-tool</artifactId>
-    <version>1.8</version>
 
-    <name>Scaler Tool</name>
-    <url>https://github.com/stanio/xbrz-java</url>
-    <licenses>
-        <license>
-            <name>Public Domain</name>
-        </license>
-    </licenses>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
-    </properties>
+    <name>xBRZ for Java Tool</name>
 
     <dependencies>
         <dependency>
-            <groupId>net.sourceforge.xbrz</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>xbrz-awt</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <scope>test</scope>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

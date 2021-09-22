@@ -5,12 +5,16 @@
                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.sourceforge.xbrz</groupId>
+    <parent>
+        <groupId>com.github.stanio</groupId>
+        <artifactId>xbrz-java</artifactId>
+        <version>1.8.0</version>
+    </parent>
     <artifactId>xbrz-core</artifactId>
-    <version>1.8</version>
 
-    <name>xBRZ 1.8</name>
-    <url>https://github.com/stanio/xbrz-java</url>
+    <name>xBRZ for Java Core Library</name>
+    <description>xBRZ: "Scale by rules" - high quality image upscaling filter by Zenju,
+Java port by Stanio</description>
     <licenses>
         <license>
             <name>GNU General Public License v3</name>
@@ -20,52 +24,32 @@
     </licenses>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+        <maven.install.skip>false</maven.install.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <resources>
             <resource>
-                <directory>${basedir}/..</directory>
+                <directory>${basedir}</directory>
                 <includes>
                     <include>LICENSE</include>
                 </includes>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Specification-Title>xBRZ: "Scale by rules" by Zenju</Specification-Title>
+                            <Specification-Version>1.8</Specification-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>

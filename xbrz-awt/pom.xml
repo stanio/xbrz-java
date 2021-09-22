@@ -5,59 +5,26 @@
                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.sourceforge.xbrz</groupId>
+    <parent>
+        <groupId>com.github.stanio</groupId>
+        <artifactId>xbrz-java</artifactId>
+        <version>1.8.0</version>
+    </parent>
     <artifactId>xbrz-awt</artifactId>
-    <version>1.8</version>
 
     <name>xBRZ for Java AWT Images</name>
-    <url>https://github.com/stanio/xbrz-java</url>
-    <licenses>
-        <license>
-            <name>Public Domain</name>
-        </license>
-    </licenses>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+        <maven.install.skip>false</maven.install.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>net.sourceforge.xbrz</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>xbrz-core</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <scope>test</scope>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
