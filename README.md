@@ -31,11 +31,11 @@ Java port of xBRZ 1.8 by Stanio.
 ### Maven
 
         <dependency>
-            <groupId>com.github.stanio</groupId>
+            <groupId>io.github.stanio</groupId>
             <artifactId>xbrz-core</artifactId>
             <version>1.8.0</version>
         </dependency>
 
 ### Gradle
 
-        implementation 'com.github.stanio:xbrz-core:1.8.0'
+        implementation 'io.github.stanio:xbrz-core:1.8.0'
