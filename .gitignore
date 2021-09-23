@@ -1,4 +1,5 @@
 .flattened-pom.xml
+pom.xml.versionsBackup
 /target/
 /xbrz-core/target/
 /xbrz-awt/target/

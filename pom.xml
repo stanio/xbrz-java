@@ -8,7 +8,7 @@
 
     <groupId>io.github.stanio</groupId>
     <artifactId>xbrz-java</artifactId>
-    <version>1.8.0</version>
+    <version>1.8.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>xBRZ for Java Reactor</name>
@@ -141,5 +141,16 @@
             </build>
         </profile>
     </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
