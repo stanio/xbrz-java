@@ -72,7 +72,7 @@ public class ScalerTool {
     }
 
     private static void printUsage() {
-        System.err.println("Usage: java -jar xbrz.jar <source> [scaling_factor]");
+        System.err.println("Usage: xbrz <source> [scaling_factor]");
     }
 
 
