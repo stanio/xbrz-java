@@ -13,6 +13,7 @@
     <artifactId>xbrz-awt</artifactId>
 
     <name>xBRZ for Java AWT Images</name>
+    <description>Scaling Java AWT images with xBRZ</description>
 
     <properties>
         <maven.install.skip>false</maven.install.skip>
