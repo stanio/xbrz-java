@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.stanio</groupId>
         <artifactId>xbrz-java</artifactId>
-        <version>1.8.0-SNAPSHOT</version>
+        <version>1.8.0-pre1</version>
     </parent>
     <artifactId>xbrz-tool</artifactId>
 
