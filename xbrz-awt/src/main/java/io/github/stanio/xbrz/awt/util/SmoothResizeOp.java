@@ -11,7 +11,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.DirectColorModel;
 
 /**
- * Smoother downscale result for factors > 2x.
+ * Smoother downscale result for factors &gt; 2x.
  *
  * @see "<i>The Perils of Image.getScaledInstance()</i> by Chris Campbell
  * &lt;https://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html&gt;

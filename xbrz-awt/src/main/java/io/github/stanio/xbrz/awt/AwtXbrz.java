@@ -76,7 +76,7 @@ public final class AwtXbrz {
      * <p>
      * <em>Note,</em> the source backing data buffer becomes <i>untracked</i>.</p>
      *
-     * @param   source
+     * @param   source  ...
      * @return  ... .
      * @see     DataBufferInt#optimizations
      */
@@ -110,9 +110,9 @@ public final class AwtXbrz {
      * Image scaled = Toolkit.getDefaultToolkit()
      *         .createImage(new FilteredImageSource(base.getSource(), xbrzFilter));</pre>
      *
-     * @param   base
-     * @param   factor
-     * @return
+     * @param   base  ...
+     * @param   factor  ...
+     * @return  ...
      */
     public static Image scaleImage(Image base, int factor) {
         ImageData imageData = ImageData.get(base);
@@ -136,9 +136,9 @@ public final class AwtXbrz {
      * {@code BufferedImage} if the source image is static, or toolkit created
      * image if the source is animated.</p>
      *
-     * @param   source
-     * @param   targetWidth
-     * @param   targetHeight
+     * @param   source  ...
+     * @param   targetWidth  ...
+     * @param   targetHeight  ...
      * @return  ...
      * @see     #scaleImage(Image, int)
      */
