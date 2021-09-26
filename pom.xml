@@ -12,7 +12,8 @@
     <packaging>pom</packaging>
 
     <name>xBRZ for Java Reactor</name>
-    <url>https://github.com/stanio/xbrz-java</url>
+    <url>https://stanio.github.io/xbrz-java</url>
+    <inceptionYear>2020</inceptionYear>
     <licenses>
         <license>
             <name>Public Domain</name>
@@ -34,7 +35,7 @@
 
     <scm child.scm.connection.inherit.append.path="false">
         <connection>scm:git:https://github.com/stanio/xbrz-java.git</connection>
-        <url>https://github.com/stanio/xbrz-java</url>
+        <url>https://github.com/stanio/xbrz-java/tree/${scm.tag}</url>
     </scm>
 
     <properties>
@@ -44,6 +45,7 @@
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <scm.tag>${project.version}</scm.tag>
     </properties>
 
     <dependencies>
@@ -67,7 +69,7 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <Git-Rev>${gitRev}</Git-Rev>
+                                <SCM-Revision>${scm.revision}</SCM-Revision>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -88,9 +90,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <buildNumberPropertyName>gitRev</buildNumberPropertyName>
+                    <buildNumberPropertyName>scm.revision</buildNumberPropertyName>
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                 </configuration>
             </plugin>
             <plugin>
