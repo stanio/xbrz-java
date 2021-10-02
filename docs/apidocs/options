@@ -1,0 +1,34 @@
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'C:/Users/stanio/work/xbrz-java/xbrz-core/src/main/java;C:/Users/stanio/work/xbrz-java/xbrz-awt/src/main/java;C:/Users/stanio/work/xbrz-java/xbrz-tool/src/main/java;C:/java/jdk1.8.0/src'
+-subpackages
+io.github.stanio
+-author
+-bottom
+'Public domain 2020, 2021'
+-charset
+'UTF-8'
+-d
+'C:/Users/stanio/work/xbrz-java/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'xBRZ for Java 1.8.0 API'
+-footer
+'<strong>xBRZ for Java 1.8.0</strong>'
+-group
+'Core Library' 'io.github.stanio.xbrz'
+-group
+'AWT Images' 'io.github.stanio.xbrz.awt:io.github.stanio.xbrz.awt.*'
+-group
+'Scaler Tool' 'io.github.stanio.xbrz.tool'
+-header
+'<strong>xBRZ for Java 1.8.0</strong>'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' 'C:/Users/stanio/work/xbrz-java/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'xBRZ for Java 1.8.0'
