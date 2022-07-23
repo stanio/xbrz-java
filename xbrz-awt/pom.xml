@@ -37,6 +37,7 @@
                     <archive>
                         <manifestEntries>
                             <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
+                            <Multi-Release>true</Multi-Release>
                         </manifestEntries>
                     </archive>
                 </configuration>
