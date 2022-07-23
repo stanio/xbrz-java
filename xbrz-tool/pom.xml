@@ -16,6 +16,7 @@
 
     <properties>
         <app.main.class>io.github.stanio.xbrz.tool.ScalerTool</app.main.class>
+        <module.name>io.github.stanio.xbrz.tool</module.name>
     </properties>
 
     <dependencies>
@@ -31,6 +32,13 @@
         <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
