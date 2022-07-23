@@ -31,6 +31,7 @@ Java port by Stanio</description>
     <build>
         <resources>
             <resource>
+                <targetPath>META-INF</targetPath>
                 <directory>${basedir}</directory>
                 <includes>
                     <include>LICENSE</include>
