@@ -24,7 +24,6 @@ Java port by Stanio</description>
     </licenses>
 
     <properties>
-        <module.name>io.github.stanio.xbrz.core</module.name>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
@@ -45,9 +44,9 @@ Java port by Stanio</description>
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
                             <Specification-Title>xBRZ: "Scale by rules" by Zenju</Specification-Title>
                             <Specification-Version>1.8</Specification-Version>
+                            <Multi-Release>true</Multi-Release>
                         </manifestEntries>
                     </archive>
                 </configuration>

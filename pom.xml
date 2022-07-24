@@ -152,8 +152,8 @@
                             </tag>
                         </tags>
                         <additionalOptions>
-                            <additionalOption>--add-modules</additionalOption>
-                            <additionalOption>java.desktop</additionalOption>
+                            <additionalOption>--add-reads</additionalOption>
+                            <additionalOption>io.github.stanio.xbrz.tool=io.github.stanio.xbrz.awt</additionalOption>
                         </additionalOptions>
                     </configuration>
                 </plugin>

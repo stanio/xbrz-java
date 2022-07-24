@@ -16,7 +16,6 @@
     <description>Scaling Java AWT images with xBRZ</description>
 
     <properties>
-        <module.name>io.github.stanio.xbrz.awt</module.name>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
@@ -36,7 +35,6 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
                             <Multi-Release>true</Multi-Release>
                         </manifestEntries>
                     </archive>
