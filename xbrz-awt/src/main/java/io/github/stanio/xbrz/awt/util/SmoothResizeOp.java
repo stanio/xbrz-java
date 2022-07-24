@@ -13,12 +13,12 @@ import java.awt.image.DirectColorModel;
 /**
  * Smoother downscale result for factors &gt; 2x.
  *
- * @see "<i>The Perils of Image.getScaledInstance()</i> by Chris Campbell
+ * @see  <span><i>The Perils of Image.getScaledInstance()</i> by Chris Campbell
  * &lt;https://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html&gt;
- * (<a href='https://web.archive.org/web/20080516181120/http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html'
- * >archive.org</a>, <a href='https://archive.fo/dArdh'>archive.fo</a>)"
- * @see "<a href='https://blog.nobel-joergensen.com/2008/12/20/downscaling-images-in-java/'
- * ><i>Downscaling images in Java</i></a> by Morten Nobel-Jørgensen"
+ * (<a href="https://web.archive.org/web/20080516181120/http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html"
+ * >archive.org</a>, <a href="https://archive.fo/dArdh">archive.fo</a>)</span>
+ * @see  <span><a href="https://blog.nobel-joergensen.com/2008/12/20/downscaling-images-in-java/"
+ * ><i>Downscaling images in Java</i></a> by Morten Nobel-Jørgensen</span>
  */
 public class SmoothResizeOp implements BufferedImageOp {
 

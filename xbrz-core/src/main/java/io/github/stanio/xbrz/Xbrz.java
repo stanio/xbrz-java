@@ -6,9 +6,9 @@ import static io.github.stanio.xbrz.RotationDegree.*;
 
 /**
  * Defines the main API for xBRZ scaling.  Instances are configured with specific
- * scale factor, color blending type (alpha vs. no alpha) and color distance
- * calculation.  A single instance could be used to scale multiple images
- * concurrently.
+ * scale factor, color blending type (alpha vs. no alpha) and {@linkplain
+ * ColorDistance color distance} function.  A single instance could be used to
+ * scale multiple images concurrently.
  * <p>
  * <em>Sample usage:</em></p>
  * <pre>
@@ -33,12 +33,18 @@ import static io.github.stanio.xbrz.RotationDegree.*;
 public class Xbrz {
 
 
+    /** <i>ScalerCfg</i> */
     public static final class ScalerCfg
     {
+        /** <i>luminanceWeight</i> */
         public double luminanceWeight            = 1;
+        /** <i>equalColorTolerance</i> */
         public double equalColorTolerance        = 30;
+        /** <i>centerDirectionBias</i> */
         public double centerDirectionBias        = 4;
+        /** <i>dominantDirectionThreshold</i> */
         public double dominantDirectionThreshold = 3.6;
+        /** <i>steepDirectionThreshold</i> */
         public double steepDirectionThreshold    = 2.2;
     }
 
@@ -67,6 +73,11 @@ public class Xbrz {
         this.withAlpha = withAlpha;
     }
 
+    /**
+     * The factor this {@code Xbrz} instance applies when scaling images.
+     *
+     * @return  The configured scaling factor
+     */
     public int scale() {
         return scaler.scale();
     }
@@ -185,6 +196,12 @@ public class Xbrz {
         }
     }
 
+    /**
+     * Scales the {@code src} pixels to the {@code trg} buffer.
+     * <p>
+     * The pixels are expected to be packed as <abbr>ARGB</abbr> {@code int}
+     * (32-bit) values.</p>
+     */
     public int[] scaleImage(int[] src, int[] trg, int srcWidth, int srcHeight) {
         int yFirst = 0;
         int yLast = srcHeight;
@@ -278,6 +295,11 @@ public class Xbrz {
         return trg;
     }
 
+    /**
+     * {@code new Xbrz(factor, hasAlpha).scaleImage(src, trg, srcWidth, srcHeight)}
+     *
+     * @see  #scaleImage(int[], int[], int, int)
+     */
     public static int[] scaleImage(int factor, boolean hasAlpha, int[] src, int[] trg, int srcWidth, int srcHeight) {
         return new Xbrz(factor, hasAlpha).scaleImage(src, trg, srcWidth, srcHeight);
     }

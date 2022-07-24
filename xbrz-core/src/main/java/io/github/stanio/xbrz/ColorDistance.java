@@ -2,6 +2,10 @@ package io.github.stanio.xbrz;
 
 import static io.github.stanio.xbrz.Color.*;
 
+/**
+ * Calculates color distance between two pixels.
+ */
+@FunctionalInterface
 public interface ColorDistance {
 
     double calc(int pix1, int pix2);
