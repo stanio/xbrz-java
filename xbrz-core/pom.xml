@@ -51,6 +51,12 @@ Java port by Stanio</description>
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <bottom>Copyleft {inceptionYear}, {currentYear}</bottom>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
