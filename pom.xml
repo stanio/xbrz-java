@@ -80,6 +80,15 @@
                     </configuration>
                     <executions>
                         <execution>
+                            <id>default-compile</id>
+                            <configuration>
+                                <release>${base.java.version}</release>
+                                <compileSourceRoots>
+                                    <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
+                                </compileSourceRoots>
+                            </configuration>
+                        </execution>
+                        <execution>
                             <id>java9-compile</id>
                             <phase>compile</phase>
                             <goals>
@@ -206,6 +215,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>java9-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/main/java9</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -233,9 +261,6 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <configuration>
-                                    <sourcepath>${project.build.sourceDirectory};${project.basedir}/src/main/java9</sourcepath>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
