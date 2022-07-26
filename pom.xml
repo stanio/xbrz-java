@@ -125,6 +125,23 @@
                     <configuration>
                         <release>17</release>
                         <debug>${javadoc.debug}</debug>
+                        <tags>
+                            <tag>
+                                <name>apiNote</name>
+                                <placement>a</placement>
+                                <head>API Note:</head>
+                            </tag>
+                            <tag>
+                                <name>implSpec</name>
+                                <placement>a</placement>
+                                <head>Implementation Requirements:</head>
+                            </tag>
+                            <tag>
+                                <name>implNote</name>
+                                <placement>a</placement>
+                                <head>Implementation Note:</head>
+                            </tag>
+                        </tags>
                         <additionalOptions>
                             <additionalOption>--add-modules</additionalOption>
                             <additionalOption>java.desktop</additionalOption>
@@ -216,6 +233,9 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <sourcepath>${project.build.sourceDirectory};${project.basedir}/src/main/java9</sourcepath>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
