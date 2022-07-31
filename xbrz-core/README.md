@@ -1,6 +1,6 @@
 # xBRZ for Java Core Library
 
-[![xbrz-core](https://img.shields.io/maven-metadata/v.svg?style=flat-square&label=xbrz-core&color=blue&logo=java&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fstanio%2Fxbrz-core%2Fmaven-metadata.xml)](https://search.maven.org/artifact/io.github.stanio/xbrz-core)
+[![xbrz-core](https://img.shields.io/maven-metadata/v.svg?label=xbrz-core&logo=OpenJDK&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fstanio%2Fxbrz-core%2Fmaven-metadata.xml)](https://search.maven.org/artifact/io.github.stanio/xbrz-core)
 
 Self-contained (no dependencies).  For using with Java AWT images one may consider [xbrz-awt](../xbrz-awt).
 

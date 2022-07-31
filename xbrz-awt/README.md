@@ -1,6 +1,6 @@
 # xBRZ for Java AWT Images
 
-[![xbrz-awt](https://img.shields.io/maven-metadata/v.svg?style=flat-square&label=xbrz-awt&color=blue&logo=java&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fstanio%2Fxbrz-awt%2Fmaven-metadata.xml)](https://search.maven.org/artifact/io.github.stanio/xbrz-awt)
+[![xbrz-awt](https://img.shields.io/maven-metadata/v.svg?label=xbrz-awt&logo=OpenJDK&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fstanio%2Fxbrz-awt%2Fmaven-metadata.xml)](https://search.maven.org/artifact/io.github.stanio/xbrz-awt)
 
 Depends on [xbrz-core](../xbrz-core).
 
