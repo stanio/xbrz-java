@@ -1,0 +1,1 @@
+moduleSearchIndex = [{"l":"io.github.stanio.xbrz.awt"},{"l":"io.github.stanio.xbrz.core"},{"l":"io.github.stanio.xbrz.tool"}];updateSearchResults();

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"io.github.stanio.xbrz.core","l":"io.github.stanio.xbrz"},{"m":"io.github.stanio.xbrz.awt","l":"io.github.stanio.xbrz.awt"},{"m":"io.github.stanio.xbrz.awt","l":"io.github.stanio.xbrz.awt.util"},{"m":"io.github.stanio.xbrz.tool","l":"io.github.stanio.xbrz.tool"}];updateSearchResults();
