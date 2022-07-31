@@ -3,6 +3,7 @@
 ## [Performing a Release Deployment](https://central.sonatype.org/publish/publish-maven/#performing-a-release-deployment)
 
     mvn versions:set -DnewVersion=1.2.3
+    mvn versions:set-scm-tag -DnewTag=1.2.3
 
     git commit -m "Set stable 1.2.3 version for release"
 

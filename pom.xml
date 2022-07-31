@@ -35,7 +35,8 @@
 
     <scm child.scm.connection.inherit.append.path="false">
         <connection>scm:git:https://github.com/stanio/xbrz-java.git</connection>
-        <url>https://github.com/stanio/xbrz-java/tree/${scm.tag}</url>
+        <tag>develop</tag>
+        <url>https://github.com/stanio/xbrz-java/tree/${project.scm.tag}</url>
     </scm>
 
     <properties>
@@ -48,7 +49,7 @@
         <javadoc.debug>${debug}</javadoc.debug>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <scm.tag>${project.version}</scm.tag>
+        <release.url>https://github.com/stanio/xbrz-java/releases/tag/${project.scm.tag}</release.url>
     </properties>
 
     <dependencies>
@@ -290,10 +291,10 @@
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
-                            <doctitle>xBRZ for Java ${scm.tag} API</doctitle>
-                            <windowtitle>xBRZ for Java ${scm.tag}</windowtitle>
+                            <doctitle>xBRZ for Java ${project.version} API</doctitle>
+                            <windowtitle>xBRZ for Java ${project.version}</windowtitle>
                             <header><![CDATA[<div style="margin-top: 14px"
-                                    ><strong><a href="]]>${project.scm.url}<![CDATA[" style="text-transform: none; font-style: italic"
+                                    ><strong><a href="]]>${release.url}<![CDATA[" style="text-transform: none; font-style: italic"
                                     >]]>xBRZ for Java ${project.version}<![CDATA[</a></strong></div>]]></header>
                         </configuration>
                     </plugin>
