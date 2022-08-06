@@ -103,6 +103,18 @@
                                 <multiReleaseOutput>true</multiReleaseOutput>
                             </configuration>
                         </execution>
+                        <execution>
+                            <id>default-testCompile</id>
+                            <configuration>
+                                <!--source>9</source>
+                                <target>9</target-->
+                                <compilerArgs>
+                                    <arg>-Xbootclasspath/a:${project.build.outputDirectory}/META-INF/versions/9</arg>
+                                    <!--arg>- -patch-module</arg>
+                                    <arg>${module.name}=${project.build.outputDirectory}/META-INF/versions/9</arg-->
+                                </compilerArgs>
+                            </configuration>
+                        </execution>
                     </executions>
                 </plugin>
                 <plugin>
@@ -124,6 +136,11 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M7</version>
+                    <configuration>
+                        <additionalClasspathElements>
+                            ${project.build.outputDirectory}/META-INF/versions/9
+                        </additionalClasspathElements>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>

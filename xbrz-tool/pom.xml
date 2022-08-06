@@ -15,6 +15,7 @@
     <name>xBRZ for Java Tool</name>
 
     <properties>
+        <module.name>io.github.stanio.xbrz.tool</module.name>
         <app.main.class>io.github.stanio.xbrz.tool.ScalerTool</app.main.class>
     </properties>
 
