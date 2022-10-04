@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                        https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>1.00</priority>
+</url>
+
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/module-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/package-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/Xbrz.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/Xbrz.ScalerCfg.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/ColorDistance.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.80</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/package-tree.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/class-use/Xbrz.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/class-use/Xbrz.ScalerCfg.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/class-use/ColorDistance.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.core/io/github/stanio/xbrz/package-use.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/module-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/package-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/AwtXbrz.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/ImageData.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/XbrzImage.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/XbrzOp.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.90</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/package-tree.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/class-use/AwtXbrz.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/class-use/ImageData.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/class-use/XbrzImage.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/class-use/XbrzOp.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/package-use.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/package-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/ChainFilterOp.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/MultiResolutionCachedImage.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/SmoothResizeOp.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.70</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/package-tree.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/class-use/ChainFilterOp.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/class-use/MultiResolutionCachedImage.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/class-use/SmoothResizeOp.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.awt/io/github/stanio/xbrz/awt/util/package-use.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.tool/module-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.tool/io/github/stanio/xbrz/tool/package-summary.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.tool/io/github/stanio/xbrz/tool/ScalerTool.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.80</priority>
+</url>
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.tool/io/github/stanio/xbrz/tool/package-tree.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.tool/io/github/stanio/xbrz/tool/class-use/ScalerTool.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/io.github.stanio.xbrz.tool/io/github/stanio/xbrz/tool/package-use.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.60</priority>
+</url-->
+
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/allclasses-index.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/allpackages-index.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<!--url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/overview-tree.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url-->
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/index-all.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://stanio.github.io/xbrz-java/apidocs/help-doc.html</loc>
+  <lastmod>2022-08-02</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.40</priority>
+</url>
+
+</urlset>
