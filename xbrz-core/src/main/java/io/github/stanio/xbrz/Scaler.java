@@ -37,7 +37,7 @@ abstract class AbstractScaler implements Scaler {
 
     protected final int scale;
 
-    private ColorGradient colorGradient;
+    private final ColorGradient colorGradient;
 
     protected AbstractScaler(int scale, boolean withAlpha) {
         this(scale, withAlpha ? gradientARGB() : gradientRGB());

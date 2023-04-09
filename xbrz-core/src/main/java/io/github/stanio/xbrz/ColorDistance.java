@@ -25,6 +25,10 @@ public interface ColorDistance {
         return new ColorDistanceYCbCr(lumaWeight);
     }
 
+    static ColorDistance integerYCbCr(double lumaWeight) {
+        return new ColorDistanceYCbCrInteger(lumaWeight);
+    }
+
     static ColorDistance bufferedYCbCr(int sigBits) {
         return new ColorDistanceYCbCrBuffered(sigBits);
     }
@@ -79,10 +83,48 @@ class ColorDistanceYCbCr implements ColorDistance {
         final double c_r = scale_r * (r_diff - y);
 
         // we skip division by 255 to have similar range like other distance functions
-        return Math.sqrt(square(lumaWeight * y) + square(c_b) + square(c_r));
+        return Math.sqrt(square(lumaWeight == 1.0 ? y : lumaWeight * y)
+                         + square(c_b) + square(c_r));
     }
 
     static double square(double value) { return value * value; }
+
+}
+
+
+class ColorDistanceYCbCrInteger implements ColorDistance {
+
+    private static final long PRECISION = 100_000L;
+    private static final long PRECISION_SQ = square(PRECISION);
+
+    final long lumaWeight;
+
+    public ColorDistanceYCbCrInteger(double lumaWeigth) {
+        this.lumaWeight = (long) (PRECISION * lumaWeigth);
+    }
+
+    static final long k_b = (long) (PRECISION * 0.0593);
+    static final long k_r = (long) (PRECISION * 0.2627);
+    static final long k_g = PRECISION - k_b - k_r;
+
+    static final long denom_b = 2 * (PRECISION - k_b);
+    static final long denom_r = 2 * (PRECISION - k_r);
+
+    @Override
+    public double calc(int pix1, int pix2) {
+        final long r_diff = getRed  (pix1) - getRed  (pix2);
+        final long g_diff = getGreen(pix1) - getGreen(pix2);
+        final long b_diff = getBlue (pix1) - getBlue (pix2);
+
+        final long y   = k_r * r_diff + k_g * g_diff + k_b * b_diff;
+        final long c_b = PRECISION * (PRECISION * b_diff - y) / denom_b;
+        final long c_r = PRECISION * (PRECISION * r_diff - y) / denom_r;
+
+        return Math.sqrt((square(lumaWeight == PRECISION ? y : y * lumaWeight / PRECISION)
+                          + square(c_b) + square(c_r)) / PRECISION_SQ);
+    }
+
+    static long square(long value) { return value * value; }
 
 }
 
