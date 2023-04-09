@@ -41,6 +41,26 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>io.github.stanio.xbrz.awt.demo.IconsDemo</mainClass>
+                            <classpathScope>test</classpathScope>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${project.build.outputDirectory}/META-INF/versions/9</additionalClasspathElement>
+                            </additionalClasspathElements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
