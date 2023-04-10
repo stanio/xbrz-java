@@ -126,16 +126,14 @@ public class Xbrz {
         }
     }
 
-    private final BlendInfo blendPixelInfo = new BlendInfo();
-
     private void blendPixel(RotationDegree rotDeg,
                             Kernel_3x3 ker,
                             OutputMatrix out,
-                            BlendInfo blendInfo) //result of preprocessing all four corners of pixel "e"
+                            byte blendInfo) //result of preprocessing all four corners of pixel "e"
     {
-        BlendInfo blend = blendPixelInfo.reset(blendInfo, rotDeg);
+        byte blend = BlendInfo.rotate(blendInfo, rotDeg);
 
-        if (blend.getBottomR() >= BLEND_NORMAL)
+        if (BlendInfo.getBottomR(blend) >= BLEND_NORMAL)
         {
             ker.rotDeg(rotDeg);
             out.rotDeg(rotDeg);
@@ -150,13 +148,13 @@ public class Xbrz {
 
             boolean doLineBlend;
 
-            if (blend.getBottomR() >= BLEND_DOMINANT)
+            if (BlendInfo.getBottomR(blend) >= BLEND_DOMINANT)
                 doLineBlend = true;
 
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            else if (blend.getTopR() != BLEND_NONE && !eq(e, g)) //but support double-blending for 90° corners
+            else if (BlendInfo.getTopR(blend) != BLEND_NONE && !eq(e, g)) //but support double-blending for 90° corners
                 doLineBlend = false;
-            else if (blend.getBottomL() != BLEND_NONE && !eq(e, c))
+            else if (BlendInfo.getBottomL(blend) != BLEND_NONE && !eq(e, c))
                 doLineBlend = false;
 
             //no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
@@ -240,8 +238,6 @@ public class Xbrz {
         //------------------------------------------------------------------------------------
 
         Kernel_3x3 ker3 = new Kernel_3x3(ker4);
-        BlendInfo blend_xy = new BlendInfo();
-        BlendInfo blend_xy1 = new BlendInfo();
 
         for (int y = yFirst; y < yLast; ++y)
         {
@@ -249,10 +245,10 @@ public class Xbrz {
             //initialize at position x = -1
             ker4.positionY(y);
 
-            //corner blending for current (x, y + 1) position
+            byte blend_xy1; //corner blending for current (x, y + 1) position
             {
                 preProcessCorners(ker4, res);
-                blend_xy1.clearAddTopL(res.blend_k); //set 1st known corner for (0, y + 1) and buffer for use on next column
+                blend_xy1 = clearAddTopL(res.blend_k); //set 1st known corner for (0, y + 1) and buffer for use on next column
 
                 addBottomL(preProcBuf, 0, res.blend_g); //set 3rd known corner for (0, y)
             }
@@ -263,18 +259,18 @@ public class Xbrz {
                 ker4.readDhlp(x); // (x, y) is at position F
 
                 //evaluate the four corners on bottom-right of current pixel
-                blend_xy.val = preProcBuf[x]; //for current (x, y) position
+                byte blend_xy = preProcBuf[x]; //for current (x, y) position
                 {
                     preProcessCorners(ker4, res);
-                    blend_xy.addBottomR(res.blend_f); //all four corners of (x, y) have been determined at this point due to processing sequence!
+                    blend_xy = addBottomR(blend_xy, res.blend_f); //all four corners of (x, y) have been determined at this point due to processing sequence!
 
-                    blend_xy1.addTopR(res.blend_j); //set 2nd known corner for (x, y + 1)
-                    preProcBuf[x] = blend_xy1.val; //store on current buffer position for use on next row
+                    blend_xy1 = addTopR(blend_xy1, res.blend_j); //set 2nd known corner for (x, y + 1)
+                    preProcBuf[x] = blend_xy1; //store on current buffer position for use on next row
 
                     if (x + 1 < srcWidth)
                     {
                         //blend_xy1 -> blend_x1y1
-                        blend_xy1.clearAddTopL(res.blend_k); //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+                        blend_xy1 = clearAddTopL(res.blend_k); //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
 
                         addBottomL(preProcBuf, x + 1, res.blend_g); //set 3rd known corner for (x + 1, y)
                     }
@@ -283,7 +279,7 @@ public class Xbrz {
                 out.fillBlock(ker4.f);
 
                 //blend all four corners of current pixel
-                if (blend_xy.blendingNeeded())
+                if (BlendInfo.blendingNeeded(blend_xy))
                 {
                     blendPixel(ROT_0,   ker3, out, blend_xy);
                     blendPixel(ROT_90,  ker3, out, blend_xy);

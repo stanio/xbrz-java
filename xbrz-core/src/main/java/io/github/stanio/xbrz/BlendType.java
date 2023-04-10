@@ -50,32 +50,28 @@ final class BlendResult
 
 final class BlendInfo {
 
-    byte val;
-
-    final BlendInfo reset(BlendInfo other, RotationDegree rotDeg) {
-        byte b = other.val;
+    static byte rotate(byte b, RotationDegree rotDeg) {
         switch (rotDeg) {
-        default:      val = b; break;
-        case ROT_90:  val = (byte) (((b << 2) & 0xFF) | ((b & 0xFF) >> 6)); break;
-        case ROT_180: val = (byte) (((b << 4) & 0xFF) | ((b & 0xFF) >> 4)); break;
-        case ROT_270: val = (byte) (((b << 6) & 0xFF) | ((b & 0xFF) >> 2)); break;
+        default:      return b;
+        case ROT_90:  return (byte) (((b << 2) & 0xFF) | ((b & 0xFF) >> 6));
+        case ROT_180: return (byte) (((b << 4) & 0xFF) | ((b & 0xFF) >> 4));
+        case ROT_270: return (byte) (((b << 6) & 0xFF) | ((b & 0xFF) >> 2));
         }
-        return this;
     }
 
-    final boolean blendingNeeded() {
-        return val != BLEND_NONE;
+    static boolean blendingNeeded(byte b) {
+        return b != BLEND_NONE;
     }
 
-    //final byte getTopL   () { return (byte) (0x3 & val); }
-    final byte getTopR   () { return (byte) (0x3 & (val >> 2)); }
-    final byte getBottomR() { return (byte) (0x3 & (val >> 4)); }
-    final byte getBottomL() { return (byte) (0x3 & (val >> 6)); }
+    //static byte getTopL   (byte b) { return (byte) (0x3 & b); }
+    static byte getTopR   (byte b) { return (byte) (0x3 & (b >> 2)); }
+    static byte getBottomR(byte b) { return (byte) (0x3 & (b >> 4)); }
+    static byte getBottomL(byte b) { return (byte) (0x3 & (b >> 6)); }
 
-    final void clearAddTopL(byte bt) { val = bt; }
-    final void addTopR     (byte bt) { val |= bt << 2; } //buffer is assumed to be initialized before preprocessing!
-    final void addBottomR  (byte bt) { val |= bt << 4; } //e.g. via clearAddTopL()
-    //final void addBottomL  (byte bt) { val |= bt << 6; } //
+    static byte clearAddTopL(        byte bt) { return bt; }
+    static byte addTopR     (byte b, byte bt) { return (byte) (b | (bt << 2)); } //buffer is assumed to be initialized before preprocessing!
+    static byte addBottomR  (byte b, byte bt) { return (byte) (b | (bt << 4)); } //e.g. via clearAddTopL()
+    //static byte addBottomL  (byte b, byte bt) { return (byte) (b | (bt << 6)); } //
 
     static void clearAddTopL(byte[] buf, int i, byte bt) { buf[i] = bt; }
     static void addTopR     (byte[] buf, int i, byte bt) { buf[i] |= bt << 2; } //buffer is assumed to be initialized before preprocessing!
