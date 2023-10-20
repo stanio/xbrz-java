@@ -16,7 +16,8 @@
     <inceptionYear>2020</inceptionYear>
     <licenses>
         <license>
-            <name>Public Domain</name>
+            <name>0BSD</name>
+            <url>https://spdx.org/licenses/0BSD</url>
         </license>
     </licenses>
 

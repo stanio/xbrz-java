@@ -6,6 +6,12 @@ Self-contained (no dependencies).  For using with Java AWT images one may consid
 
 JPMS name: `io.github.stanio.xbrz.core` (Java 8 compatible Multi-Release JAR)
 
+## License
+
+This module is distributed under the GNU General Public License v3, with the
+[Classpath Exception](https://en.wikipedia.org/wiki/GPL_linking_exception#The_Classpath_exception).
+See [LICENSE](LICENSE).
+
 ## API
 
 Example using `java.awt.image.BufferedImage`:
