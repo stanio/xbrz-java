@@ -28,3 +28,10 @@ smooth interpolation.
 
 One may notice downscaling a hires base image using a smooth algorithm (bilinear, bicubic) generally produces better, more detailed results vs. upscaling a lores
 base image.  Having a source hires variant could make xBRZ unnecessary.
+
+## Lincense
+
+Except for [xbrz-core](xbrz-core), this project, source code and
+documentation is released under
+[BSD Zero Clause License](https://spdx.org/licenses/0BSD).
+See [LICENSE](LICENSE.md).

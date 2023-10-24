@@ -1,8 +1,7 @@
-Except for [xbrz-core](xbrz-core), this project, source code and
-documentation is released under
-[BSD Zero Clause License](https://spdx.org/licenses/0BSD):
+[BSD Zero Clause License](https://spdx.org/licenses/0BSD),
+except for [xbrz-core](xbrz-core/LICENSE).
 
-Copyright (C) 2020, 2023 by stanio AT yahoo DOT com
+Copyright (C) 2020 by Stanio <stanio AT yahoo DOT com>
 
 Permission to use, copy, modify, and/or distribute this software for
 any purpose with or without fee is hereby granted.
