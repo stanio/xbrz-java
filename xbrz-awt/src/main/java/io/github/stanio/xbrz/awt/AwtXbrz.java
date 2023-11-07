@@ -178,10 +178,10 @@ public final class AwtXbrz {
         final int maxFactor = 6;
         while ((scaledWidth < targetWidth
                     || scaledHeight < targetHeight)
-                && factor <= maxFactor) {
-            scaledWidth <<= 1;
-            scaledHeight <<= 1;
+                && factor < maxFactor) {
             factor += 1;
+            scaledWidth = sourceWidth * factor;
+            scaledHeight = sourceHeight * factor;
         }
         return factor;
     }
