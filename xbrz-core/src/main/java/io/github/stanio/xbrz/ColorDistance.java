@@ -2,6 +2,10 @@ package io.github.stanio.xbrz;
 
 import static io.github.stanio.xbrz.Color.*;
 
+import java.lang.ref.WeakReference;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * Calculates color distance between two pixels.
  */
@@ -30,7 +34,7 @@ public interface ColorDistance {
     }
 
     static ColorDistance bufferedYCbCr(int sigBits) {
-        return new ColorDistanceYCbCrBuffered(sigBits);
+        return ColorDistanceYCbCrBuffered.instance(sigBits);
     }
 
     static ColorDistance withAlpha(ColorDistance dist) {
@@ -167,6 +171,26 @@ class ColorDistanceYCbCrBuffered extends ColorDistanceYCbCr {
 
             diffToDist[i] = (float) Math.sqrt(square(y) + square(c_b) + square(c_r));
         }
+    }
+
+    private static ConcurrentMap<Integer, WeakReference<ColorDistanceYCbCrBuffered>>
+            instances = new ConcurrentHashMap<>();
+
+    public static ColorDistanceYCbCrBuffered instance(int sigBits) {
+        ColorDistanceYCbCrBuffered[] ptr = { null };
+        instances.compute(sigBits, (k, ref) -> {
+            ColorDistanceYCbCrBuffered obj = (ref == null) ? null : ref.get();
+            try {
+                if (obj == null) {
+                    obj = new ColorDistanceYCbCrBuffered(k);
+                    return new WeakReference<>(obj);
+                }
+                return ref;
+            } finally {
+                ptr[0] = obj;
+            }
+        });
+        return ptr[0];
     }
 
     @Override
