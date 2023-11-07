@@ -22,21 +22,31 @@ final class Kernel_4x4 {
     m, n, o,
     d, h, l, p;
 
-    private final int[] src;
-    private final int srcWidth;
-    private final int srcHeight;
-    private final boolean withAlpha;
+    private int[] src;
+    private int srcWidth;
+    private int srcHeight;
+    private boolean withAlpha;
 
     private int s_m1;
     private int s_0;
     private int s_p1;
     private int s_p2;
 
-    Kernel_4x4(int[] src, int srcWidth, int srcHeight, boolean withAlpha) {
-        this.src = src;
-        this.srcWidth = srcWidth;
-        this.srcHeight = srcHeight;
-        this.withAlpha = withAlpha;
+    private Kernel_4x4() {}
+
+    private static final ThreadLocal<Kernel_4x4> instance = new ThreadLocal<>();
+
+    static Kernel_4x4 instance(int[] src, int srcWidth, int srcHeight, boolean withAlpha) {
+        Kernel_4x4 kernel = instance.get();
+        if (kernel == null) {
+            kernel = new Kernel_4x4();
+            instance.set(kernel);
+        }
+        kernel.src = src;
+        kernel.srcWidth = srcWidth;
+        kernel.srcHeight = srcHeight;
+        kernel.withAlpha = withAlpha;
+        return kernel;
     }
 
     final void positionY(int y) {
@@ -163,11 +173,21 @@ final class Kernel_4x4 {
 */
 final class Kernel_3x3 {
 
-    private final Kernel_4x4 ker4;
+    private Kernel_4x4 ker4;
     private RotationDegree rotDeg = ROT_0;
 
-    Kernel_3x3(Kernel_4x4 ker4) {
-        this.ker4 = ker4;
+    private Kernel_3x3() {}
+
+    private static final ThreadLocal<Kernel_3x3> instance = new ThreadLocal<>();
+
+    static Kernel_3x3 instance(Kernel_4x4 ker4) {
+        Kernel_3x3 kernel = instance.get();
+        if (kernel == null) {
+            kernel = new Kernel_3x3();
+            instance.set(kernel);
+        }
+        kernel.ker4 = ker4;
+        return kernel;
     }
 
     final int a() {

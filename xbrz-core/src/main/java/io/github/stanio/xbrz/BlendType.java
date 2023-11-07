@@ -32,6 +32,19 @@ final class BlendResult
     /**/blend_f, blend_g,
     /**/blend_j, blend_k;
 
+    private BlendResult() {}
+
+    private static final ThreadLocal<BlendResult> instance = new ThreadLocal<>();
+
+    static BlendResult instance() {
+        BlendResult result = instance.get();
+        if (result == null) {
+            result = new BlendResult();
+            instance.set(result);
+        }
+        return result;
+    }
+
     final void reset() {
         blend_f = blend_g = blend_j = blend_k = BLEND_NONE;
     }

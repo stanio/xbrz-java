@@ -215,10 +215,10 @@ public class Xbrz {
             return;
 
         byte[] preProcBuf = new byte[srcWidth];
-        Kernel_4x4 ker4 = new Kernel_4x4(src, srcWidth, srcHeight, withAlpha);
-        OutputMatrix out = new OutputMatrix(scaler.scale(), trg, srcWidth * scaler.scale());
+        Kernel_4x4 ker4 = Kernel_4x4.instance(src, srcWidth, srcHeight, withAlpha);
+        OutputMatrix out = OutputMatrix.instance(scaler.scale(), trg, srcWidth * scaler.scale());
 
-        final BlendResult res = new BlendResult();
+        final BlendResult res = BlendResult.instance();
 
         //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
         {
@@ -243,7 +243,7 @@ public class Xbrz {
         }
         //------------------------------------------------------------------------------------
 
-        Kernel_3x3 ker3 = new Kernel_3x3(ker4);
+        Kernel_3x3 ker3 = Kernel_3x3.instance(ker4);
 
         for (int y = yFirst; y < yLast; ++y)
         {

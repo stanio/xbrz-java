@@ -3,22 +3,35 @@ package io.github.stanio.xbrz;
 import static io.github.stanio.xbrz.MatrixRotation.HALF_BYTE;
 import static io.github.stanio.xbrz.RotationDegree.*;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 //access matrix area, top-left at current position
 final class OutputMatrix {
 
-    private final int N;
-    private final int[] out;
-    private final int outWidth;
+    private int N;
+    private int[] out;
+    private int outWidth;
 
     private int offset;
     private RotationDegree rotDeg = ROT_0;
-    private final MatrixRotation rot;
+    private MatrixRotation rot;
 
-    OutputMatrix(int N, int[] out, int outWidth) {
-        this.N = N;
-        this.out = out;
-        this.outWidth = outWidth;
-        this.rot = MatrixRotation.of(N);
+    private OutputMatrix() {}
+
+    private static final ThreadLocal<OutputMatrix> instance = new ThreadLocal<>();
+
+    static OutputMatrix instance(int N, int[] out, int outWidth) {
+        OutputMatrix matrix = instance.get();
+        if (matrix == null) {
+            matrix = new OutputMatrix();
+            instance.set(matrix);
+        }
+        matrix.N = N;
+        matrix.out = out;
+        matrix.outWidth = outWidth;
+        matrix.rot = MatrixRotation.of(N);
+        return matrix;
     }
 
     final void positionY(int y) {
@@ -96,8 +109,11 @@ final class MatrixRotation {
         this.lookup = lookup;
     }
 
+    private static final
+    ConcurrentMap<Integer, MatrixRotation> instance = new ConcurrentHashMap<>();
+
     static MatrixRotation of(int N) {
-        return new MatrixRotation(N);
+        return instance.computeIfAbsent(N, MatrixRotation::new);
     }
 
     private final byte calc(int rotDeg, byte IJ) {
