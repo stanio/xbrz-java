@@ -15,6 +15,9 @@ import java.awt.image.ColorModel;
 import java.awt.image.DataBufferInt;
 import java.util.Objects;
 
+/**
+ * Single-input/single-output xBRZ operation.
+ */
 public class XbrzOp implements BufferedImageOp {
 
     private final int factor;

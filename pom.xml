@@ -46,6 +46,7 @@
         <maven.compiler.source>${base.java.version}</maven.compiler.source>
         <maven.compiler.target>${base.java.version}</maven.compiler.target>
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+        <javadoc.version>21</javadoc.version>
         <doclint>all,-missing</doclint>
         <javadoc.debug>${debug}</javadoc.debug>
         <maven.install.skip>true</maven.install.skip>
@@ -163,7 +164,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.6.2</version>
                     <configuration>
-                        <release>17</release>
+                        <release>${javadoc.version}</release>
                         <debug>${javadoc.debug}</debug>
                         <tags>
                             <tag>

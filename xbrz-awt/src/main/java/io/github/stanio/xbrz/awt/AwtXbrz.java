@@ -34,11 +34,29 @@ public final class AwtXbrz {
         return scaleImage(source, factor, false);
     }
 
-    public static BufferedImage scaleImage(ImageData source, int factor, boolean untracked) {
+    /**
+     * Scales the given pixel data by the specified factor.
+     * <p>
+     * The {@code untrackedData} parameter controls whether the result image
+     * will be backed by a {@linkplain DataBufferInt##optimizations <i>tracked</i>
+     * data buffer} or not.  Having a <i>tracked</i> data buffer will likely
+     * benefit on-screen display performance, while it may incur some
+     * initialization slow down.  If you only need to process images off
+     * screen, f.e. read a source image, scale it, and save the result, then
+     * you may specify {@code untracked = true} to save up on result
+     * initialization cost.</p>
+     *
+     * @param   source  ...
+     * @param   factor  ...
+     * @param   untrackedData  ...
+     * @return  ...
+     * @see     DataBufferInt##optimizations  DataBuffer performance optimizations
+     */
+    public static BufferedImage scaleImage(ImageData source, int factor, boolean untrackedData) {
         ImageData target = new ImageData(source, factor);
         Xbrz xbrz = ScalerPool.getScaler(factor, source.hasAlpha);
         xbrz.scaleImage(source.pixels, target.pixels, source.width, source.height);
-        return untracked ? makeImage(target) : makeTracked(target);
+        return untrackedData ? makeImage(target) : makeTracked(target);
     }
 
     private static BufferedImage makeImage(ImageData data) {

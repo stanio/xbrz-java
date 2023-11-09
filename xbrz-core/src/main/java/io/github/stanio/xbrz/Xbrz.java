@@ -54,6 +54,13 @@ public class Xbrz {
     private final ColorDistance dist;
     private final boolean withAlpha;
 
+    /**
+     * Constructs a new xBRZ scaler.
+     *
+     * @param   factor  the scale factor to apply
+     * @throws  IllegalArgumentException
+     *          if the specified scale factor is &lt; 2 or &gt; 6
+     */
     public Xbrz(int factor) {
         this(factor, true);
     }
