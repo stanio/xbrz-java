@@ -43,12 +43,15 @@ public final class XbrzImage {
      * Creates a {@code MultiResolutionImage} deriving resolution variants by
      * applying xBRZ to the given image.
      *
+     * @param   <M> an {@code Image} subclass that implements {@code MultiResolutionImage}
      * @param   image  base image to derive resolution variants from
      * @return  A {@code MultiResolutionImage} dynamically producing xBRZ variants
      * @see     MultiResolutionCachedImage
      */
-    public static AbstractMultiResolutionImage mrImage(Image image) {
-        return (AbstractMultiResolutionImage) apply(new ImageIcon(image)).getImage();
+    public static <M extends Image & MultiResolutionImage> M mrImage(Image image) {
+        @SuppressWarnings("unchecked")
+        M mrImage = (M) apply(new ImageIcon(image)).getImage();
+        return mrImage;
     }
 
 }
