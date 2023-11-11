@@ -21,7 +21,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.DirectColorModel;
-import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 
@@ -124,7 +123,7 @@ public class XbrzFilter extends ImageFilter {
     public static Image createScaledImage(Image image, Xbrz xbrz) {
         XbrzFilter xbrzFilter = new XbrzFilter(xbrz);
         ImageProducer filteredSource =
-                new FilteredImageSource(image.getSource(), xbrzFilter);
+                new SuspendableFilteredSource(image.getSource(), xbrzFilter);
         return Toolkit.getDefaultToolkit().createImage(filteredSource);
     }
 

@@ -9,13 +9,12 @@ import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferInt;
 import java.awt.image.DirectColorModel;
-import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageProducer;
 import java.awt.image.Raster;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 
 import io.github.stanio.xbrz.Xbrz;
-import io.github.stanio.xbrz.awt.util.ChainFilterOp;
 import io.github.stanio.xbrz.awt.util.SmoothResizeOp;
 
 /**
@@ -104,12 +103,12 @@ public final class AwtXbrz {
     }
 
     private static Image makeFiltered(Image base, int factor) {
-        return makeFiltered(base, new XbrzOp(factor));
+        return XbrzFilter.createScaledImage(base, factor);
     }
 
     private static Image makeFiltered(Image base, BufferedImageOp op) {
-        BufferedImageFilter bufferedFilter = new BufferedImageFilter(new CachingOp(op));
-        FilteredImageSource filteredSource = new FilteredImageSource(base.getSource(), bufferedFilter);
+        BufferedImageFilter bufferedFilter = new BufferedImageFilter(op);
+        ImageProducer filteredSource = new SuspendableFilteredSource(base.getSource(), bufferedFilter);
         return Toolkit.getDefaultToolkit().createImage(filteredSource);
     }
 
@@ -167,22 +166,28 @@ public final class AwtXbrz {
                         && imageData.height == targetHeight)) {
             return source;
         }
+        return scaleImage(imageData, source, targetWidth, targetHeight);
+    }
 
+    static Image scaleImage(ImageData imageData, Image animatedSource, int targetWidth, int targetHeight) {
         int factor = AwtXbrz.findFactor(imageData.width, imageData.height, targetWidth, targetHeight);
         SmoothResizeOp resizeOp = new SmoothResizeOp(targetWidth, targetHeight);
         if (factor == 1) {
-            return imageData.isAnimated() ? makeFiltered(source, resizeOp)
+            return imageData.isAnimated() ? makeFiltered(animatedSource, resizeOp)
                                           : resizeOp.filter(makeTracked(imageData), null);
         }
 
         boolean integralScale = imageData.width * factor == targetWidth
                                 && imageData.height * factor == targetHeight;
         if (imageData.isAnimated()) {
-            BufferedImageOp scaleOp = new XbrzOp(factor, true, null);
-            if (!integralScale) {
-                scaleOp = ChainFilterOp.first(scaleOp).next(resizeOp);
+            Image scaledImage = makeFiltered(animatedSource, factor);
+            final int maxFactor = 6;
+            boolean upscale = imageData.width * maxFactor < targetWidth
+                              && imageData.height * maxFactor < targetHeight;
+            if (integralScale || upscale) {
+                return scaledImage;
             }
-            return makeFiltered(source, scaleOp);
+            return makeFiltered(scaledImage, resizeOp);
         }
         BufferedImage result = scaleImage(imageData, factor);
         return integralScale ? result : resizeOp.filter(result, null);
