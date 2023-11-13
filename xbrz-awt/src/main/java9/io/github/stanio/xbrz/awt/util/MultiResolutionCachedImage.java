@@ -4,41 +4,32 @@
  */
 package io.github.stanio.xbrz.awt.util;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import java.awt.Image;
-import java.awt.image.AbstractMultiResolutionImage;
-import java.awt.image.ImageObserver;
 import java.awt.image.MultiResolutionImage;
-
-import javax.swing.ImageIcon;
 
 /**
  * A {@code MultiResolutionImage} that caches resolution variants as they
  * get produced.
  *
- * @implNote  Caches at most 2 variants.  This should possibly cover the
+ * @implNote  Caches at most 4 variants.  This should possibly cover the
  *      most common scenario of displaying the same image (f.e. an icon)
  *      on two monitors with different scaling factors
  *      ({@code GraphicsConfiguration}s).
  */
-public class MultiResolutionCachedImage extends AbstractMultiResolutionImage {
+public abstract class MultiResolutionCachedImage extends BaseMultiResolutionImage {
 
-    private static final int CAPACITY = 2;
-
-    protected final int baseWidth;
-    protected final int baseHeight;
-
-    private final BiFunction<Integer, Integer, Image> variantProducer;
-
-    // REVISIT: Would shared cache yield a smaller memory usage?
-    private volatile CachedVariant[] cache = new CachedVariant[CAPACITY];
-    private volatile int cacheSize = 0;
+    private static final int CAPACITY = 4;
+    private final List<CachedVariant> cache = new ArrayList<>(CAPACITY);
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     /**
      * Constructs a new {@code MultiResolutionCachedImage} of the given
@@ -46,20 +37,26 @@ public class MultiResolutionCachedImage extends AbstractMultiResolutionImage {
      *
      * @param   baseWidth  the user-space logical with of the image
      * @param   baseHeight  the user-space logical height of the image
-     * @param   variantProducer  function producing image variants at given
-     *          width and height
      */
-    public MultiResolutionCachedImage(int baseWidth, int baseHeight,
-            BiFunction<Integer, Integer, Image> variantProducer)
-    {
-        this.baseWidth = baseWidth;
-        this.baseHeight = baseHeight;
-        this.variantProducer = Objects.requireNonNull(variantProducer, "variantProducer");
+    public MultiResolutionCachedImage(int baseWidth, int baseHeight) {
+        super(baseWidth, baseHeight);
     }
 
-    public static MultiResolutionCachedImage of(int baseWidth, int baseHeight,
-            BiFunction<Integer, Integer, Image> variantProducer) {
-        return new MultiResolutionCachedImage(baseWidth, baseHeight, variantProducer);
+    public static MultiResolutionCachedImage
+            of(int baseWidth, int baseHeight,
+                    BiFunction<Integer, Integer, Image> variantProducer) {
+        return withProducer(baseWidth, baseHeight, variantProducer);
+    }
+
+    public static MultiResolutionCachedImage
+            withProducer(int baseWidth, int baseHeight,
+                    BiFunction<Integer, Integer, Image> variantProducer) {
+        return new MultiResolutionCachedImage(baseWidth, baseHeight) {
+            @Override protected
+            Image createResolutionVariant(int width, int height) {
+                return variantProducer.apply(width, height);
+            }
+        };
     }
 
     public MultiResolutionCachedImage map(Function<Image, Image> mapper) {
@@ -72,7 +69,7 @@ public class MultiResolutionCachedImage extends AbstractMultiResolutionImage {
      * <p>
      * <i>Sample usage:</i></p>
      * <pre>
-     *     public static Image createDisabledImage(Image image) {
+     * <code>    public static Image createDisabledImage(Image image) {
      *         if (i instanceof MultiResolutionImage) {
      *             return MultiResolutionCachedImage
      *                     .map((MultiResolutionImage) image,
@@ -85,87 +82,103 @@ public class MultiResolutionCachedImage extends AbstractMultiResolutionImage {
      *         GrayFilter filter = new GrayFilter(true, 50);
      *         ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
      *         return Toolkit.getDefaultToolkit().createImage(producer);
-     *     }</pre>
+     *     }</code></pre>
      */
     public static Image map(MultiResolutionImage mrImage, Function<Image, Image> mapper) {
         Image image = (Image) mrImage;
         int width = image.getWidth(null);
         int height = image.getHeight(null);
-        return new MultiResolutionCachedImage(width, height,
+        return MultiResolutionCachedImage.withProducer(width, height,
                 (w, h) -> mapper.apply(mrImage.getResolutionVariant(w, h)));
-    }
-
-    @Override
-    public int getWidth(ImageObserver observer) {
-        return baseWidth;
-    }
-
-    @Override
-    public int getHeight(ImageObserver observer) {
-        return baseHeight;
-    }
-
-    @Override
-    protected Image getBaseImage() {
-        return getResolutionVariant(getWidth(null), getHeight(null));
-    }
-
-    @Override
-    public Image getScaledInstance(int width, int height, int hints) {
-        return getResolutionVariant(width, height);
     }
 
     @Override
     public Image getResolutionVariant(double destWidth, double destHeight) {
         int width = (int) Math.ceil(destWidth);
         int height = (int) Math.ceil(destHeight);
-        for (int i = 0, size = cacheSize; i < size; i++) {
-            CachedVariant variant = cache[i];
-            if (variant.width == destWidth
-                    && variant.height == destHeight) {
-                return variant.image;
-            }
-        }
-
-        Image variant = variantProducer.apply(width, height);
-        synchronized (cache) {
-            if (cacheSize >= cache.length) {
-                cacheSize = cache.length - 1;
-                System.arraycopy(cache, 1, cache, 0, cacheSize);
-            }
-            cache[cacheSize++] = new CachedVariant(width, height, variant);
+        Image variant = findCachedVariant(width, height);
+        if (variant == null) {
+            variant = createResolutionVariant(width, height);
+            cacheVariant(width, height, variant);
+            preloadDimensions(variant);
         }
         return variant;
     }
 
+    private Image findCachedVariant(int width, int height) {
+        lock.readLock().lock();
+        try {
+            for (int i = cache.size() - 1; i >= 0; i--) {
+                CachedVariant variant = cache.get(i);
+                Image image = variant.get();
+                if (image == null)
+                    continue;
+
+                if (variant.width == width
+                        && variant.height == height)
+                    return image;
+            }
+            return null;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    private void cacheVariant(int width, int height, Image image) {
+        lock.writeLock().lock();
+        try {
+            for (int i = cache.size() - 1; i >= 0; i--) {
+                CachedVariant variant = cache.get(i);
+                if (variant.get() == null) {
+                    cache.remove(i);
+                } else if (variant.width == width
+                        && variant.height == height) {
+                    // Possibly the same size has been added concurrently.
+                    return;
+                }
+            }
+            if (cache.size() >= CAPACITY) {
+                cache.remove(0);
+            }
+            cache.add(new CachedVariant(width, height, image));
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    protected abstract Image createResolutionVariant(int width, int height);
+
     @Override
     public List<Image> getResolutionVariants() {
-        int size = cacheSize;
-        if (size == 0) {
+        if (cache.size() == 0) {
             return Collections.singletonList(getBaseImage());
         }
 
-        List<Image> variants = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            Image image = cache[i].image;
-            if (!variants.contains(image)) {
-                variants.add(image);
+        List<Image> variants = new ArrayList<>(cache.size());
+        lock.readLock().lock();
+        try {
+            for (int i = cache.size() - 1; i >= 0; i--) {
+                Image image = cache.get(i).get();
+                if (image != null && !variants.contains(image)) {
+                    variants.add(image);
+                }
             }
+        } finally {
+            lock.readLock().unlock();
         }
         return variants;
     }
 
 
-    private static class CachedVariant {
+    private static class CachedVariant extends WeakReference<Image> {
 
         final int width;
         final int height;
-        final Image image;
 
         CachedVariant(int width, int height, Image image) {
+            super(image);
             this.width = width;
             this.height = height;
-            this.image = new ImageIcon(image).getImage(); // preload
         }
 
     }
