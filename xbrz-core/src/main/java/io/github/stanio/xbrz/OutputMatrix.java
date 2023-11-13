@@ -92,8 +92,8 @@ final class MatrixRotation {
     private MatrixRotation(int N) {
         this.N = N;
         this.Nsq = N * N;
-        if (N > 16) {
-            throw new IllegalArgumentException("N should be <= 16");
+        if (N <= 0 || N >= 16) {
+            throw new IllegalArgumentException("N should be > 0 and < 16");
         }
 
         byte[] lookup = new byte[4 * Nsq];
