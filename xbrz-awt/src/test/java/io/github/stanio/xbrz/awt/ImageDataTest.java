@@ -24,7 +24,7 @@ public class ImageDataTest extends AbstractAwtXbrzTest {
 
     @Test
     public void toolkitIndexedSourceWithoutAlpha() {
-        Image source = toolkit().createImage(resource("gbamockup-truecolor.png"));
+        Image source = toolkit().createImage(resource("gbamockup-indexcolor.png"));
 
         ImageData sourceData = ImageData.get(source);
 
