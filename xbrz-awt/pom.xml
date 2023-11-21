@@ -19,6 +19,7 @@
         <module.name>io.github.stanio.xbrz.awt</module.name>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
+        <exec.mainClass>io.github.stanio.xbrz.awt.demo.IconsDemo</exec.mainClass>
     </properties>
 
     <dependencies>
@@ -46,12 +47,13 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>default-cli</id>
+                        <id>demo</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>io.github.stanio.xbrz.awt.demo.IconsDemo</mainClass>
+                            <skip>false</skip>
+                            <mainClass>${exec.mainClass}</mainClass>
                             <classpathScope>test</classpathScope>
                             <additionalClasspathElements>
                                 <additionalClasspathElement>${project.build.outputDirectory}/META-INF/versions/9</additionalClasspathElement>

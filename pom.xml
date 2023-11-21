@@ -219,6 +219,16 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.1.1</version>
+                    <executions>
+                        <execution>
+                            <id>demo</id>
+                            <configuration>
+                                <skip>true</skip>
+                                <!-- XXX: Required even with skipped executions -->
+                                <mainClass>dummy</mainClass>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

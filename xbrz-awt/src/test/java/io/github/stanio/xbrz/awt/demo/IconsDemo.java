@@ -42,6 +42,10 @@ import io.github.stanio.xbrz.awt.util.MultiResolutionCachedImage;
 public class IconsDemo extends JFrame {
 
     public IconsDemo() {
+        this("editbookmarks2");
+    }
+
+    public IconsDemo(String iconName) {
         super("Icon Scaling");
         super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         super.getRootPane().getActionMap().put("exit", new AbstractAction() {
@@ -52,15 +56,14 @@ public class IconsDemo extends JFrame {
         });
         super.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                            .put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false), "exit");
-        initUI();
+        initUI(iconName);
     }
 
     private static Image loadImage(String name) {
         return new ImageIcon(IconsDemo.class.getResource(name)).getImage();
     }
 
-    private void initUI() {
-        final String imageName = "editbookmarks2";
+    private void initUI(String imageName) {
         Image loresImage = loadImage(imageName + "-16.png");
         Image hiresImage = loadImage(imageName + "-32.png");
 
@@ -192,13 +195,14 @@ public class IconsDemo extends JFrame {
      * @param   args  <i>unused</i>
      */
     public static void main(String[] args) {
+        final String iconName = (args.length == 1) ? args[0] : "editbookmarks2";
         SwingUtilities.invokeLater(() -> {
             try {
                 javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             } catch (Exception e) {
                 System.err.println(e);
             }
-            IconsDemo frame = new IconsDemo();
+            IconsDemo frame = new IconsDemo(iconName);
             frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
             frame.pack();
             frame.setLocationRelativeTo(null);
