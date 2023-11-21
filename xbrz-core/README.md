@@ -1,6 +1,6 @@
 # xBRZ for Java Core Library
 
-[![xbrz-core:1.8.2](https://img.shields.io/badge/xbrz--core-1.8.2-blue?style=flat-square)](https://central.sonatype.com/artifact/io.github.stanio/xbrz-core/1.8.2)
+[![xbrz-core](https://img.shields.io/maven-central/v/io.github.stanio/xbrz-core?label=xbrz-core&logo=openjdk&logoColor=silver)](https://central.sonatype.com/artifact/io.github.stanio/xbrz-core)
 
 Self-contained (no dependencies).  For using with Java AWT images one may consider [xbrz-awt](../xbrz-awt).
 
