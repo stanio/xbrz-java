@@ -13,12 +13,11 @@ import java.awt.image.DirectColorModel;
 /**
  * Smoother downscale result for factors &gt; 2x.
  *
- * @see  <span><i>The Perils of Image.getScaledInstance()</i> by Chris Campbell
- * &lt;https://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html&gt;
- * (<a href="https://web.archive.org/web/20080516181120/http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html"
- * >archive.org</a>, <a href="https://archive.fo/dArdh">archive.fo</a>)</span>
- * @see  <span><a href="https://blog.nobel-joergensen.com/2008/12/20/downscaling-images-in-java/"
- * ><i>Downscaling images in Java</i></a> by Morten Nobel-Jørgensen</span>
+ * @see  <a href="https://web.archive.org/web/20080516181120/http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html"
+ *              >The Perils of Image.getScaledInstance()</a> <i>by Chris Campbell (archived from
+ *              &lt;https://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html&gt;)</i>
+ * @see  <a href="https://blog.nobel-joergensen.com/2008/12/20/downscaling-images-in-java/"
+ *              >Downscaling images in Java</a> <i>by Morten Nobel-Jørgensen</i>
  */
 public class SmoothResizeOp implements BufferedImageOp {
 
@@ -65,12 +64,35 @@ public class SmoothResizeOp implements BufferedImageOp {
 
     @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dest) {
-        BufferedImage source = scaleBelowThreshold(src);
         BufferedImage target = dest;
         if (target == null) {
             target = createCompatibleDestImage(src, null);
         }
+        return resizeSmooth(src, target, destWidth, destHeight);
+    }
 
+    private BufferedImage resizeSmooth(BufferedImage src,
+                                       BufferedImage dest,
+                                       int targetWidth,
+                                       int targetHeight) {
+        int halfWidth = (int) Math.ceil(src.getWidth() / 2);
+        int halfHeight = (int) Math.ceil(src.getHeight() / 2);
+
+        BufferedImage source = src;
+        if (targetWidth < halfWidth
+                || targetHeight < halfHeight) {
+            int w = (targetWidth < halfWidth) ? targetWidth * 2 : targetWidth;
+            int h = (targetHeight < halfHeight) ? targetHeight * 2 : targetHeight;
+            source = resizeSmooth(src, null, w, h);
+        }
+
+        BufferedImage target = dest;
+        if (target == null) {
+            int imageType = src.getColorModel().hasAlpha()
+                            ? BufferedImage.TYPE_INT_ARGB
+                            : BufferedImage.TYPE_INT_RGB;
+            target = new BufferedImage(targetWidth, targetHeight, imageType);
+        }
         Graphics2D g = target.createGraphics();
         if (getRenderingHints() == null) {
             setSmoothHints(g);
@@ -78,45 +100,11 @@ public class SmoothResizeOp implements BufferedImageOp {
             g.setRenderingHints(getRenderingHints());
         }
         try {
-            g.drawImage(source, 0, 0, destWidth, destHeight, null);
+            g.drawImage(source, 0, 0, targetWidth, targetHeight, null);
         } finally {
             g.dispose();
         }
         return target;
-    }
-
-    private BufferedImage scaleBelowThreshold(BufferedImage src) {
-        final int thresholdWidth = destWidth << 1;
-        final int thresholdHeight = destHeight << 1;
-        BufferedImage current = src;
-        int currentWidth = src.getWidth();
-        int currentHeight = src.getHeight();
-        while (currentWidth > thresholdWidth || currentHeight > thresholdHeight) {
-            if (currentWidth > thresholdWidth)
-                currentWidth /= 2;
-            if (currentHeight > thresholdHeight)
-                currentHeight /= 2;
-
-            current = scaleSmooth(current, currentWidth, currentHeight);
-        }
-        return current;
-    }
-
-    private static BufferedImage scaleSmooth(BufferedImage source,
-                                             int destWidth,
-                                             int destHeight) {
-        BufferedImage variant = new BufferedImage(destWidth, destHeight,
-                                                  source.getColorModel().hasAlpha()
-                                                  ? BufferedImage.TYPE_INT_ARGB
-                                                  : BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = variant.createGraphics();
-        setSmoothHints(g);
-        try {
-            g.drawImage(source, 0, 0, destWidth, destHeight, null);
-        } finally {
-            g.dispose();
-        }
-        return variant;
     }
 
     private static void setSmoothHints(Graphics2D g) {
