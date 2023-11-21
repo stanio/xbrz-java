@@ -85,8 +85,17 @@ public class Xbrz {
      *
      * @return  The configured scaling factor
      */
-    public int scale() {
+    public int factor() {
         return scaler.scale();
+    }
+
+    /**
+     * {@code factor} alias.
+     *
+     * @see     #factor()
+     */
+    public int scale() {
+        return factor();
     }
 
     private final double dist(int pix1, int pix2) { return dist.calc(pix1, pix2); }
