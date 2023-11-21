@@ -187,6 +187,12 @@
                                 ><strong><a href="]]>${project.scm.url}<![CDATA[" style="text-transform: none; font-style: italic"
                                 >]]>${project.name} ${project.version}<![CDATA[</a></strong></div>]]></header>
                         <bottom>Public domain {inceptionYear}, {currentYear}</bottom>
+                        <offlineLinks>
+                            <offlineLink>
+                                <url>https://stanio.github.io/xbrz-java/apidocs/</url>
+                                <location>${maven.multiModuleProjectDirectory}/docs/apidocs/</location>
+                            </offlineLink>
+                        </offlineLinks>
                         <additionalOptions>
                             <additionalOption>--add-reads</additionalOption>
                             <additionalOption>io.github.stanio.xbrz.tool=io.github.stanio.xbrz.awt</additionalOption>
