@@ -1,6 +1,6 @@
 # xBRZ for Java AWT Images
 
-[![xbrz-awt](https://img.shields.io/maven-central/v/io.github.stanio/xbrz-awt?label=xbrz-awt&logo=openjdk)](https://search.maven.org/artifact/io.github.stanio/xbrz-awt)
+[![xbrz-awt:1.8.2](https://img.shields.io/badge/xbrz--awt-1.8.2-blue?style=flat-square)](https://central.sonatype.com/artifact/io.github.stanio/xbrz-awt/1.8.2)
 
 Depends on [xbrz-core](../xbrz-core).
 
