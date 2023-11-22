@@ -17,9 +17,9 @@
 Java port by Stanio</description>
     <licenses>
         <license>
-            <name>GNU General Public License v3</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0</url>
-            <comments>Classpath Exception</comments>
+            <name>GPL-3.0-only WITH Classpath-exception-2.0</name>
+            <url>https://spdx.org/licenses/GPL-3.0-only</url>
+            <comments>https://spdx.org/licenses/Classpath-exception-2.0.html</comments>
         </license>
     </licenses>
 
