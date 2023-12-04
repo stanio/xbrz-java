@@ -88,7 +88,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>3.13.0</version>
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
@@ -133,7 +133,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.4.0</version>
                     <configuration>
                         <archive>
                             <manifest>
@@ -149,7 +149,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.2.5</version>
                     <configuration>
                         <additionalClasspathElements>
                             ${project.build.outputDirectory}/META-INF/versions/9
@@ -158,11 +158,11 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.6.2</version>
+                    <version>3.6.3</version>
                     <configuration>
                         <release>${javadoc.version}</release>
                         <debug>${javadoc.debug}</debug>
@@ -211,7 +211,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.5.0</version>
+                    <version>1.6.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -224,7 +224,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.2.0</version>
                     <executions>
                         <execution>
                             <id>demo</id>
@@ -283,7 +283,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>java9-source</id>
@@ -331,7 +331,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.2.3</version>
                         <executions>
                             <execution>
                                 <id>sign-release-artifacts</id>
