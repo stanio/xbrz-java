@@ -17,6 +17,8 @@
     <properties>
         <module.name>io.github.stanio.xbrz.tool</module.name>
         <app.main.class>io.github.stanio.xbrz.tool.ScalerTool</app.main.class>
+        <!-- Replace the main artifact with the shaded one. -->
+        <shade.attached>false</shade.attached>
     </properties>
 
     <dependencies>
@@ -52,7 +54,7 @@
                 <version>3.5.2</version>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                    <shadedArtifactAttached>${shade.attached}</shadedArtifactAttached>
                     <shadedClassifierName>fat</shadedClassifierName>
                     <filters>
                         <filter>
@@ -99,16 +101,15 @@
     <profiles>
         <profile>
             <id>apidoc</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <!--
+                  - Use the original non-shaded JAR for the aggregate javadoc,
+                  - otherwise the shaded classes cause:
+                  -
+                  - error: No source files for package io.github.stanio.xbrz
+                  -->
+                <shade.attached>true</shade.attached>
+            </properties>
         </profile>
     </profiles>
 
