@@ -193,10 +193,6 @@
                                 <location>${maven.multiModuleProjectDirectory}/docs/apidocs/</location>
                             </offlineLink>
                         </offlineLinks>
-                        <additionalOptions>
-                            <additionalOption>--add-reads</additionalOption>
-                            <additionalOption>io.github.stanio.xbrz.tool=io.github.stanio.xbrz.awt</additionalOption>
-                        </additionalOptions>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -350,12 +346,22 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <inherited>false</inherited>
                         <configuration>
                             <doctitle>xBRZ for Java ${project.version} API</doctitle>
                             <windowtitle>xBRZ for Java ${project.version}</windowtitle>
                             <header><![CDATA[<div style="margin-top: 14px"
                                     ><strong><a href="]]>${release.url}<![CDATA[" style="text-transform: none; font-style: italic"
                                     >]]>xBRZ for Java ${project.version}<![CDATA[</a></strong></div>]]></header>
+                            <!--
+                              - The xbrz-tool module-info doesn't specify requirement on
+                              - "io.github.stanio.xbrz.awt" as it packages it internally,
+                              - unlike the non-shaded JAR used for aggregate javadoc generation.
+                              -->
+                            <additionalOptions>
+                                <additionalOption>--add-reads</additionalOption>
+                                <additionalOption>io.github.stanio.xbrz.tool=io.github.stanio.xbrz.awt</additionalOption>
+                            </additionalOptions>
                         </configuration>
                     </plugin>
                 </plugins>
