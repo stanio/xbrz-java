@@ -17,6 +17,7 @@
     <properties>
         <module.name>io.github.stanio.xbrz.tool</module.name>
         <app.main.class>io.github.stanio.xbrz.tool.ScalerTool</app.main.class>
+        <shade.skip>false</shade.skip>
         <!-- Replace the main artifact with the shaded one. -->
         <shade.attached>false</shade.attached>
     </properties>
@@ -53,6 +54,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
+                    <skip>${shade.skip}</skip>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <shadedArtifactAttached>${shade.attached}</shadedArtifactAttached>
                     <shadedClassifierName>fat</shadedClassifierName>
