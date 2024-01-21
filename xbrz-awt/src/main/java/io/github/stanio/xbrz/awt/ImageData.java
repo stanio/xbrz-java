@@ -6,10 +6,14 @@ import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferInt;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
+import java.awt.image.SampleModel;
+import java.awt.image.SinglePixelPackedSampleModel;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -62,16 +66,38 @@ public final class ImageData {
         int height = image.getHeight();
         int imageType = image.getType();
         ColorSpace colorSpace = image.getColorModel().getColorSpace();
+        // Try to extract integer-packed RGB data more efficiently
         if ((imageType == BufferedImage.TYPE_INT_ARGB
                         || imageType == BufferedImage.TYPE_INT_RGB)
                 && (colorSpace.isCS_sRGB() || colorSpace == CS_LINEAR_RGB)) {
             Raster raster = image.getRaster();
-            if (untracked && raster.getDataBuffer().getNumBanks() == 1) {
+            if (untracked && hasDirectIntBuffer(raster)) {
                 return ((DataBufferInt) raster.getDataBuffer()).getData();
             }
-            return (int[]) raster.getDataElements(0, 0, width, height, null);
+            // Could Raster.transferType differ from Raster.dataBuffer.dataType?
+            if (raster.getTransferType() == DataBuffer.TYPE_INT) {
+                // Any Raster used to construct a BufferedImage must have minX=0 and minY=0.
+                return (int[]) raster.getDataElements(0, 0, width, height, null);
+            }
         }
+        // All BufferedImage objects have an upper left corner coordinate of (0, 0).
         return image.getRGB(0, 0, width, height, null, 0, width);
+    }
+
+    private static boolean hasDirectIntBuffer(Raster raster) {
+        // Raster origin should map to the beginning of the data
+        // buffer and there should be no padding to the scanlines
+        SampleModel sampleModel = raster.getSampleModel();
+        DataBuffer dataBuffer = raster.getDataBuffer();
+        return raster.getMinX() - raster.getSampleModelTranslateX() == 0
+                && raster.getMinY() - raster.getSampleModelTranslateY() == 0
+                && sampleModel instanceof SinglePixelPackedSampleModel
+                && ((SinglePixelPackedSampleModel) sampleModel).getScanlineStride() == raster.getWidth()
+                // Though DataBuffer.dataType == TYPE_INT, the actual class
+                // may not be a DataBufferInt subclass, f.e. DataBufferNative
+                && dataBuffer instanceof DataBufferInt
+                && dataBuffer.getNumBanks() == 1
+                && dataBuffer.getOffset() == 0;
     }
 
     /**
