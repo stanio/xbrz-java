@@ -165,6 +165,9 @@
                     <version>3.6.3</version>
                     <configuration>
                         <release>${javadoc.version}</release>
+                        <!--jdkToolchain>
+                            <version>${javadoc.version}</version>
+                        </jdkToolchain-->
                         <debug>${javadoc.debug}</debug>
                         <tags>
                             <tag>
