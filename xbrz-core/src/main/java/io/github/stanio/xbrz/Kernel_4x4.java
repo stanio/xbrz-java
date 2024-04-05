@@ -32,7 +32,11 @@ final class Kernel_4x4 {
     private int s_p1;
     private int s_p2;
 
-    private Kernel_4x4() {}
+    private final Kernel_3x3 ker3;
+
+    private Kernel_4x4() {
+        this.ker3 = new Kernel_3x3(this);
+    }
 
     private static final ThreadLocal<Kernel_4x4> instance = new ThreadLocal<>();
 
@@ -47,6 +51,10 @@ final class Kernel_4x4 {
         kernel.srcHeight = srcHeight;
         kernel.withAlpha = withAlpha;
         return kernel;
+    }
+
+    final Kernel_3x3 kernel_3x3() {
+        return ker3;
     }
 
     final void positionY(int y) {
@@ -173,21 +181,12 @@ final class Kernel_4x4 {
 */
 final class Kernel_3x3 {
 
-    private Kernel_4x4 ker4;
+    private final Kernel_4x4 ker4;
+
     private RotationDegree rotDeg = ROT_0;
 
-    private Kernel_3x3() {}
-
-    private static final ThreadLocal<Kernel_3x3> instance = new ThreadLocal<>();
-
-    static Kernel_3x3 instance(Kernel_4x4 ker4) {
-        Kernel_3x3 kernel = instance.get();
-        if (kernel == null) {
-            kernel = new Kernel_3x3();
-            instance.set(kernel);
-        }
-        kernel.ker4 = ker4;
-        return kernel;
+    Kernel_3x3(Kernel_4x4 ker4) {
+        this.ker4 = ker4;
     }
 
     final int a() {
