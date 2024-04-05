@@ -39,17 +39,59 @@ public class Xbrz {
     /** <i>ScalerCfg</i> */
     public static final class ScalerCfg
     {
-        /** <i>luminanceWeight</i> */
-        public double luminanceWeight            = 1;
-        /** <i>equalColorTolerance</i> */
-        public double equalColorTolerance        = 30;
-        /** <i>centerDirectionBias</i> */
-        public double centerDirectionBias        = 4;
-        /** <i>dominantDirectionThreshold</i> */
-        public double dominantDirectionThreshold = 3.6;
-        /** <i>steepDirectionThreshold</i> */
-        public double steepDirectionThreshold    = 2.2;
+        /** <i>luminance weight</i> */
+        public final double luminanceWeight;
+        /** <i>equal color tolerance</i> */
+        public final double equalColorTolerance;
+        /** <i>center direction bias</i> */
+        public final double centerDirectionBias;
+        /** <i>dominant direction threshold</i> */
+        public final double dominantDirectionThreshold;
+        /** <i>steep direction threshold</i> */
+        public final double steepDirectionThreshold;
+
+        public ScalerCfg() {
+            this(1, 30, 4, 3.6, 2.2);
     }
+
+        public ScalerCfg(double luminanceWeight,
+                         double equalColorTolerance,
+                         double centerDirectionBias,
+                         double dominantDirectionThreshold,
+                         double steepDirectionThreshold) {
+            this.luminanceWeight = luminanceWeight;
+            this.equalColorTolerance = equalColorTolerance;
+            this.centerDirectionBias = centerDirectionBias;
+            this.dominantDirectionThreshold = dominantDirectionThreshold;
+            this.steepDirectionThreshold = steepDirectionThreshold;
+        }
+
+        public ScalerCfg withLuminanceWeight(double luminanceWeight) {
+            return new ScalerCfg(luminanceWeight, equalColorTolerance,
+                    centerDirectionBias, dominantDirectionThreshold, steepDirectionThreshold);
+        }
+
+        public ScalerCfg withEqualColorTolerance(double equalColorTolerance) {
+            return new ScalerCfg(luminanceWeight, equalColorTolerance,
+                    centerDirectionBias, dominantDirectionThreshold, steepDirectionThreshold);
+        }
+
+        public ScalerCfg withCenterDirectionBias(double centerDirectionBias) {
+            return new ScalerCfg(luminanceWeight, equalColorTolerance,
+                    centerDirectionBias, dominantDirectionThreshold, steepDirectionThreshold);
+        }
+
+        public ScalerCfg withDominantDirectionThreshold(double dominantDirectionThreshold) {
+            return new ScalerCfg(luminanceWeight, equalColorTolerance,
+                    centerDirectionBias, dominantDirectionThreshold, steepDirectionThreshold);
+        }
+
+        public ScalerCfg withSteepDirectionThreshold(double steepDirectionThreshold) {
+            return new ScalerCfg(luminanceWeight, equalColorTolerance,
+                    centerDirectionBias, dominantDirectionThreshold, steepDirectionThreshold);
+        }
+
+    } // class ScalerCfg
 
 
     /** The JVM may reserve some header words in an array. */
