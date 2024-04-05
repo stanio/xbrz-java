@@ -73,11 +73,12 @@ final class OutputMatrix {
                 out[trg + x] = col;
     }
 
-}
+
+    @FunctionalInterface interface IntFunction {
+        int apply(int a);
+    }
 
 
-@FunctionalInterface interface IntFunction {
-    int apply(int a);
 }
 
 
