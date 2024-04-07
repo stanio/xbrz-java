@@ -8,12 +8,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
 import java.awt.image.SampleModel;
 import java.awt.image.SinglePixelPackedSampleModel;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -32,6 +34,13 @@ public final class ImageData {
     public final int height;
     public final boolean hasAlpha;
     final int[] pixels;
+
+    ImageData(int width, int height, boolean hasAlpha, int[] pixels) {
+        this.width = width;
+        this.height = height;
+        this.hasAlpha = hasAlpha;
+        this.pixels = Objects.requireNonNull(pixels);
+    }
 
     ImageData(BufferedImage image) {
         this(image, false);
@@ -62,26 +71,51 @@ public final class ImageData {
     }
 
     private static int[] getRGB(BufferedImage image, boolean untracked) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        int imageType = image.getType();
-        ColorSpace colorSpace = image.getColorModel().getColorSpace();
+        return getRGB(image.getRaster(), image.getColorModel(), untracked);
+    }
+
+    static int[] getRGB(Raster raster, ColorModel colorModel, boolean untracked) {
         // Try to extract integer-packed RGB data more efficiently
-        if ((imageType == BufferedImage.TYPE_INT_ARGB
-                        || imageType == BufferedImage.TYPE_INT_RGB)
-                && (colorSpace.isCS_sRGB() || colorSpace == CS_LINEAR_RGB)) {
-            Raster raster = image.getRaster();
+        if (isDefaultRGB(colorModel)) {
             if (untracked && hasDirectIntBuffer(raster)) {
                 return ((DataBufferInt) raster.getDataBuffer()).getData();
             }
             // Could Raster.transferType differ from Raster.dataBuffer.dataType?
             if (raster.getTransferType() == DataBuffer.TYPE_INT) {
-                // Any Raster used to construct a BufferedImage must have minX=0 and minY=0.
-                return (int[]) raster.getDataElements(0, 0, width, height, null);
+                return (int[]) raster.getDataElements(raster.getMinX(),
+                        raster.getMinY(), raster.getWidth(), raster.getHeight(), null);
             }
         }
-        // All BufferedImage objects have an upper left corner coordinate of (0, 0).
-        return image.getRGB(0, 0, width, height, null, 0, width);
+        return getRGB(raster, colorModel);
+    }
+
+    /**
+     * @see     BufferedImage#getRGB(int, int, int, int, int[], int, int)
+     */
+    private static int[] getRGB(Raster raster, ColorModel colorModel) {
+        final int width = raster.getWidth();
+        final int height = raster.getHeight();
+        final int offset = 0;
+        final int scansize = width;
+        final int[] rgbArray = new int[offset + height * scansize];
+
+        Object pixel = null;
+        for (int y = raster.getMinY(), yend = y + height,
+                yoff = offset; y < yend; y++, yoff += scansize) {
+
+            for (int x = raster.getMinX(), xend = x + width,
+                    off = yoff; x < xend; x++, off++) {
+
+                pixel = raster.getDataElements(x, y, pixel);
+                try {
+                    rgbArray[off] = colorModel.getRGB(pixel);
+                } catch (RuntimeException e) {
+                    throw new IllegalStateException("Raster " + raster
+                            + " is incompatible with color model " + colorModel, e);
+                }
+            }
+        }
+        return rgbArray;
     }
 
     private static boolean hasDirectIntBuffer(Raster raster) {
@@ -98,6 +132,20 @@ public final class ImageData {
                 && dataBuffer instanceof DataBufferInt
                 && dataBuffer.getNumBanks() == 1
                 && dataBuffer.getOffset() == 0;
+    }
+
+    private static boolean isDefaultRGB(ColorModel colorModel) {
+        if (colorModel instanceof DirectColorModel) {
+            return colorModel.getTransferType() == DataBuffer.TYPE_INT
+                    && !colorModel.isAlphaPremultiplied()
+                    && isDefaultRGB(colorModel.getColorSpace());
+        }
+        return false;
+    }
+
+    private static boolean isDefaultRGB(ColorSpace colorSpace) {
+        // For the time being, treat both of sRGB and linear RGB the same
+        return colorSpace.isCS_sRGB() || colorSpace == CS_LINEAR_RGB;
     }
 
     /**
