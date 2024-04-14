@@ -1,5 +1,7 @@
 package io.github.stanio.xbrz.awt;
 
+import static io.github.stanio.xbrz.Xbrz.targetArraySize;
+
 import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
@@ -52,7 +54,7 @@ public final class ImageData {
         width = source.width * factor;
         height = source.height * factor;
         hasAlpha = source.hasAlpha;
-        pixels = new int[width * height];
+        pixels = new int[targetArraySize(source.width, source.height, factor)];
     }
 
     private static int[] getRGB(BufferedImage image, boolean untracked) {

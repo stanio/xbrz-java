@@ -3,6 +3,9 @@ package io.github.stanio.xbrz;
 import static io.github.stanio.xbrz.BlendInfo.*;
 import static io.github.stanio.xbrz.BlendType.*;
 import static io.github.stanio.xbrz.RotationDegree.*;
+import static java.lang.Math.multiplyExact;
+
+import java.util.function.Supplier;
 
 /**
  * Defines the main API for xBRZ scaling.  Instances are configured with specific
@@ -48,6 +51,11 @@ public class Xbrz {
         public double steepDirectionThreshold    = 2.2;
     }
 
+
+    /** The JVM may reserve some header words in an array. */
+    private static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
+
+    private static final boolean DEBUG = false;
 
     private final Scaler scaler;
     private final ScalerCfg cfg;
@@ -218,7 +226,7 @@ public class Xbrz {
      */
     public int[] scaleImage(int[] src, int[] trg, int srcWidth, int srcHeight) {
         if (trg == null) {
-            trg = new int[srcWidth * scale() * srcHeight * scale()];
+            trg = new int[targetArraySize(srcWidth, srcHeight, factor())];
         }
         scaleImage(src, trg, srcWidth, srcHeight, 0, srcHeight);
         return trg;
@@ -319,6 +327,25 @@ public class Xbrz {
      */
     public static int[] scaleImage(int factor, boolean hasAlpha, int[] src, int[] trg, int srcWidth, int srcHeight) {
         return new Xbrz(factor, hasAlpha).scaleImage(src, trg, srcWidth, srcHeight);
+    }
+
+    public static int targetArraySize(int sourceWidth, int sourceHeight, int factor) {
+        Supplier<String> message = () -> "Target size exceeds implementation limits (sourceWidth: "
+                + sourceWidth + ", sourceHeight: " + sourceHeight + ", scaleFactor: " + factor + ")";
+        try {
+            int targetSize = multiplyExact(multiplyExact(sourceWidth, factor),
+                                           multiplyExact(sourceHeight, factor));
+            if (targetSize > SOFT_MAX_ARRAY_LENGTH) {
+                throw new OutOfMemoryError(message.get());
+            }
+            return targetSize;
+        } catch (ArithmeticException e) {
+            if (DEBUG) {
+                System.err.print("DEBUG: ");
+                e.printStackTrace(System.err);
+            }
+            throw new OutOfMemoryError(message.get());
+        }
     }
 
 }
