@@ -8,7 +8,7 @@ setlocal
 set BASE_DIR=%~dp0
 if "%BASE_DIR%" == "%CD%\" set BASE_DIR=
 
-set apidocs_src=target\apidocs\src
+set apidocs_src=target\reports\apidocs\src
 
 if "%JDK_HOME%" == "" set JDK_HOME=%JAVA_HOME%
 if "%JDK_HOME%" == "" (
