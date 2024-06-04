@@ -98,6 +98,8 @@ public class ScalerTool {
                 throw new IIOException("Unsupported image format: " + source);
             }
             this.reader = imageReaders.next();
+            reader.addIIOReadWarningListener((_reader, warning) ->
+                    System.err.append(source.toString()).append(": ").println(warning));
             reader.setInput(imageStream, true, true);
         }
 
