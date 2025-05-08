@@ -19,6 +19,7 @@
         <module.name>io.github.stanio.xbrz.awt</module.name>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
+        <central.publish.skip>false</central.publish.skip>
         <exec.mainClass>io.github.stanio.xbrz.awt.demo.IconsDemo</exec.mainClass>
     </properties>
 
@@ -61,6 +62,10 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

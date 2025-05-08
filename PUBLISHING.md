@@ -1,6 +1,4 @@
-## [Deploying to OSSRH with Apache Maven](https://central.sonatype.org/publish/publish-maven/)
-
-## [Performing a Release Deployment](https://central.sonatype.org/publish/publish-maven/#performing-a-release-deployment)
+## [Publishing By Using the Maven Plugin](https://central.sonatype.org/publish/publish-portal-maven/)
 
     mvn versions:set -DnewVersion=1.2.3
     mvn versions:set-scm-tag -DnewTag=1.2.3
@@ -11,10 +9,7 @@
 
     mvn clean deploy -P release
 
-## [Releasing Deployment from OSSRH to the Central Repository](https://central.sonatype.org/publish/release/)
-
--   [Locate and Examine Your Staging Repository](https://central.sonatype.org/publish/release/#locate-and-examine-your-staging-repository)
--   [Close and Drop or Release Your Staging Repository](https://central.sonatype.org/publish/release/#close-and-drop-or-release-your-staging-repository)
+## [Publishing Your Components – Component Validation](https://central.sonatype.org/publish/publish-portal-guide/#component-validation)
 
 ## Update site Apidocs
 

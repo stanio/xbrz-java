@@ -27,6 +27,7 @@ Java port by Stanio</description>
         <module.name>io.github.stanio.xbrz.core</module.name>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
+        <central.publish.skip>false</central.publish.skip>
     </properties>
 
     <build>
@@ -57,6 +58,10 @@ Java port by Stanio</description>
                 <configuration>
                     <bottom>Copyleft {inceptionYear}, {currentYear}</bottom>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
