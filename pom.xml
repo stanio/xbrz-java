@@ -49,6 +49,7 @@
         <javadoc.version>21</javadoc.version>
         <doclint>all,-missing</doclint>
         <javadoc.debug>${debug}</javadoc.debug>
+        <javadoc.notimestamp>true</javadoc.notimestamp>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
         <release.url>https://github.com/stanio/xbrz-java/releases/tag/${project.scm.tag}</release.url>
@@ -168,6 +169,7 @@
                             <version>${javadoc.version}</version>
                         </jdkToolchain-->
                         <debug>${javadoc.debug}</debug>
+                        <notimestamp>${javadoc.notimestamp}</notimestamp>
                         <tags>
                             <tag>
                                 <name>apiNote</name>
