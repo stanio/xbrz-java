@@ -48,9 +48,12 @@ class AnimatedMultiResolutionImage extends BaseMultiResolutionImage {
             ((SuspendableFilteredSource) lastSource).stopProduction();
         }
 
+        lastFactor = factor;
+        if (factor == 1) {
+            return (lastVariant = baseImage);
+        }
         Xbrz scaler = scalers.computeIfAbsent(factor, k ->
                 new Xbrz(k, true, new ScalerCfg(), ColorDistance.bufferedYCbCr(5)));
-        lastFactor = factor;
         return lastVariant = preloadDimensions(
                 XbrzFilter.createScaledImage(baseImage, scaler));
     }
