@@ -171,6 +171,7 @@
                         </jdkToolchain-->
                         <debug>${javadoc.debug}</debug>
                         <notimestamp>${javadoc.notimestamp}</notimestamp>
+                        <locale>en_US</locale>
                         <tags>
                             <tag>
                                 <name>apiNote</name>
