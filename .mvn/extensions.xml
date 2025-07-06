@@ -6,6 +6,6 @@
     <extension>
         <groupId>org.apache.maven.extensions</groupId>
         <artifactId>maven-enforcer-extension</artifactId>
-        <version>3.4.1</version>
+        <version>3.6.3</version>
     </extension>
 </extensions>
