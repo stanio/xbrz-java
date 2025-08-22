@@ -37,6 +37,14 @@ abstract class AbstractScaler implements Scaler {
 
     protected final int scale;
 
+    final int scaleM1;
+    final int scaleM2;
+    final int scaleM3;
+
+    final int scaleD2;
+    final int scaleD2P1;
+    final int scaleD2P2;
+
     private final ColorGradient colorGradient;
 
     protected AbstractScaler(int scale, boolean withAlpha) {
@@ -45,6 +53,12 @@ abstract class AbstractScaler implements Scaler {
 
     protected AbstractScaler(int scale, ColorGradient colorGradient) {
         this.scale = scale;
+        this.scaleM1 = scale - 1;
+        this.scaleM2 = scale - 2;
+        this.scaleM3 = scale - 3;
+        this.scaleD2 = scale / 2;
+        this.scaleD2P1 = scale / 2 + 1;
+        this.scaleD2P2 = scale / 2 + 2;
         this.colorGradient = colorGradient;
     }
 
@@ -68,14 +82,14 @@ class Scaler2x extends AbstractScaler {
 
     @Override
     public void blendLineShallow(int col, OutputMatrix out) {
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
     }
 
     @Override
     public void blendLineSteep(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
     }
 
     @Override
@@ -107,20 +121,20 @@ class Scaler3x extends AbstractScaler {
 
     @Override
     public void blendLineShallow(int col, OutputMatrix out) {
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 2, 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM2, 2, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(scale - 1, 2, col);
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 2, col);
     }
 
     @Override
     public void blendLineSteep(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(2, scale - 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(2, scaleM2, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(2, scale - 1, col);
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(2, scaleM1, col);
     }
 
     @Override
@@ -158,26 +172,26 @@ class Scaler4x extends AbstractScaler {
 
     @Override
     public void blendLineShallow(int col, OutputMatrix out) {
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 2, 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM2, 2, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(scale - 2, 3, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM2, 3, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(scale - 1, 2, col);
-        out.set(scale - 1, 3, col);
+        out.set(scaleM1, 2, col);
+        out.set(scaleM1, 3, col);
     }
 
     @Override
     public void blendLineSteep(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(2, scale - 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(2, scaleM2, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(3, scale - 2, ref -> alphaGrad(3, 4, ref, col));
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(3, scaleM2, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(2, scale - 1, col);
-        out.set(3, scale - 1, col);
+        out.set(2, scaleM1, col);
+        out.set(3, scaleM1, col);
     }
 
     @Override
@@ -196,9 +210,9 @@ class Scaler4x extends AbstractScaler {
 
     @Override
     public void blendLineDiagonal(int col, OutputMatrix out) {
-        out.set(scale - 1, scale / 2    , ref -> alphaGrad(1, 2, ref, col));
-        out.set(scale - 2, scale / 2 + 1, ref -> alphaGrad(1, 2, ref, col));
-        out.set(scale - 1, scale - 1, col);
+        out.set(scaleM1, scaleD2,   ref -> alphaGrad(1, 2, ref, col));
+        out.set(scaleM2, scaleD2P1, ref -> alphaGrad(1, 2, ref, col));
+        out.set(scaleM1, scaleM1,   col);
     }
 
     @Override
@@ -220,59 +234,59 @@ class Scaler5x extends AbstractScaler {
 
     @Override
     public void blendLineShallow(int col, OutputMatrix out) {
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 2, 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 3, 4, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM2, 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM3, 4, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(scale - 2, 3, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM2, 3, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(scale - 1, 2, col);
-        out.set(scale - 1, 3, col);
-        out.set(scale - 1, 4, col);
-        out.set(scale - 2, 4, col);
+        out.set(scaleM1, 2, col);
+        out.set(scaleM1, 3, col);
+        out.set(scaleM1, 4, col);
+        out.set(scaleM2, 4, col);
     }
 
     @Override
     public void blendLineSteep(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(2, scale - 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(4, scale - 3, ref -> alphaGrad(1, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(2, scaleM2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(4, scaleM3, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(3, scale - 2, ref -> alphaGrad(3, 4, ref, col));
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(3, scaleM2, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(2, scale - 1, col);
-        out.set(3, scale - 1, col);
-        out.set(4, scale - 1, col);
-        out.set(4, scale - 2, col);
+        out.set(2, scaleM1, col);
+        out.set(3, scaleM1, col);
+        out.set(4, scaleM1, col);
+        out.set(4, scaleM2, col);
     }
 
     @Override
     public void blendLineSteepAndShallow(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(2, scale - 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(2, scaleM2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 2, 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM2, 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
 
         out.set(3, 3, ref -> alphaGrad(2, 3, ref, col));
 
-        out.set(2, scale - 1, col);
-        out.set(3, scale - 1, col);
-        out.set(4, scale - 1, col);
+        out.set(2, scaleM1, col);
+        out.set(3, scaleM1, col);
+        out.set(4, scaleM1, col);
 
-        out.set(scale - 1, 2, col);
-        out.set(scale - 1, 3, col);
+        out.set(scaleM1, 2, col);
+        out.set(scaleM1, 3, col);
     }
 
     @Override
     public void blendLineDiagonal(int col, OutputMatrix out) {
-        out.set(scale - 1, scale / 2    , ref -> alphaGrad(1, 8, ref, col)); //conflict with other rotations for this odd scale
-        out.set(scale - 2, scale / 2 + 1, ref -> alphaGrad(1, 8, ref, col));
-        out.set(scale - 3, scale / 2 + 2, ref -> alphaGrad(1, 8, ref, col)); //
+        out.set(scaleM1, scaleD2,   ref -> alphaGrad(1, 8, ref, col)); //conflict with other rotations for this odd scale
+        out.set(scaleM2, scaleD2P1, ref -> alphaGrad(1, 8, ref, col));
+        out.set(scaleM3, scaleD2P2, ref -> alphaGrad(1, 8, ref, col)); //
 
         out.set(4, 3, ref -> alphaGrad(7, 8, ref, col));
         out.set(3, 4, ref -> alphaGrad(7, 8, ref, col));
@@ -301,75 +315,75 @@ class Scaler6x extends AbstractScaler {
 
     @Override
     public void blendLineShallow(int col, OutputMatrix out) {
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 2, 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 3, 4, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM2, 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM3, 4, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(scale - 2, 3, ref -> alphaGrad(3, 4, ref, col));
-        out.set(scale - 3, 5, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM2, 3, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM3, 5, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(scale - 1, 2, col);
-        out.set(scale - 1, 3, col);
-        out.set(scale - 1, 4, col);
-        out.set(scale - 1, 5, col);
+        out.set(scaleM1, 2, col);
+        out.set(scaleM1, 3, col);
+        out.set(scaleM1, 4, col);
+        out.set(scaleM1, 5, col);
 
-        out.set(scale - 2, 4, col);
-        out.set(scale - 2, 5, col);
+        out.set(scaleM2, 4, col);
+        out.set(scaleM2, 5, col);
     }
 
     @Override
     public void blendLineSteep(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(2, scale - 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(4, scale - 3, ref -> alphaGrad(1, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(2, scaleM2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(4, scaleM3, ref -> alphaGrad(1, 4, ref, col));
 
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(3, scale - 2, ref -> alphaGrad(3, 4, ref, col));
-        out.set(5, scale - 3, ref -> alphaGrad(3, 4, ref, col));
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(3, scaleM2, ref -> alphaGrad(3, 4, ref, col));
+        out.set(5, scaleM3, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(2, scale - 1, col);
-        out.set(3, scale - 1, col);
-        out.set(4, scale - 1, col);
-        out.set(5, scale - 1, col);
+        out.set(2, scaleM1, col);
+        out.set(3, scaleM1, col);
+        out.set(4, scaleM1, col);
+        out.set(5, scaleM1, col);
 
-        out.set(4, scale - 2, col);
-        out.set(5, scale - 2, col);
+        out.set(4, scaleM2, col);
+        out.set(5, scaleM2, col);
     }
 
     @Override
     public void blendLineSteepAndShallow(int col, OutputMatrix out) {
-        out.set(0, scale - 1, ref -> alphaGrad(1, 4, ref, col));
-        out.set(2, scale - 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(1, scale - 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(3, scale - 2, ref -> alphaGrad(3, 4, ref, col));
+        out.set(0, scaleM1, ref -> alphaGrad(1, 4, ref, col));
+        out.set(2, scaleM2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(1, scaleM1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(3, scaleM2, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(scale - 1, 0, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 2, 2, ref -> alphaGrad(1, 4, ref, col));
-        out.set(scale - 1, 1, ref -> alphaGrad(3, 4, ref, col));
-        out.set(scale - 2, 3, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM1, 0, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM2, 2, ref -> alphaGrad(1, 4, ref, col));
+        out.set(scaleM1, 1, ref -> alphaGrad(3, 4, ref, col));
+        out.set(scaleM2, 3, ref -> alphaGrad(3, 4, ref, col));
 
-        out.set(2, scale - 1, col);
-        out.set(3, scale - 1, col);
-        out.set(4, scale - 1, col);
-        out.set(5, scale - 1, col);
+        out.set(2, scaleM1, col);
+        out.set(3, scaleM1, col);
+        out.set(4, scaleM1, col);
+        out.set(5, scaleM1, col);
 
-        out.set(4, scale - 2, col);
-        out.set(5, scale - 2, col);
+        out.set(4, scaleM2, col);
+        out.set(5, scaleM2, col);
 
-        out.set(scale - 1, 2, col);
-        out.set(scale - 1, 3, col);
+        out.set(scaleM1, 2, col);
+        out.set(scaleM1, 3, col);
     }
 
     @Override
     public void blendLineDiagonal(int col, OutputMatrix out) {
-        out.set(scale - 1, scale / 2    , ref -> alphaGrad(1, 2, ref, col));
-        out.set(scale - 2, scale / 2 + 1, ref -> alphaGrad(1, 2, ref, col));
-        out.set(scale - 3, scale / 2 + 2, ref -> alphaGrad(1, 2, ref, col));
+        out.set(scaleM1, scaleD2,   ref -> alphaGrad(1, 2, ref, col));
+        out.set(scaleM2, scaleD2P1, ref -> alphaGrad(1, 2, ref, col));
+        out.set(scaleM3, scaleD2P2, ref -> alphaGrad(1, 2, ref, col));
 
-        out.set(scale - 2, scale - 1, col);
-        out.set(scale - 1, scale - 1, col);
-        out.set(scale - 1, scale - 2, col);
+        out.set(scaleM2, scaleM1, col);
+        out.set(scaleM1, scaleM1, col);
+        out.set(scaleM1, scaleM2, col);
     }
 
     @Override
