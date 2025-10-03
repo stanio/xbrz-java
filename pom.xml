@@ -228,12 +228,12 @@
                 <plugin>
                     <groupId>org.sonatype.central</groupId>
                     <artifactId>central-publishing-maven-plugin</artifactId>
-                    <version>0.8.0</version>
+                    <version>0.11.0</version>
                     <extensions>true</extensions>
                     <configuration>
                         <publishingServerId>central</publishingServerId>
                         <skipPublishing>${central.publish.skip}</skipPublishing>
-                        <!--centralsnapshotsurl>https://central.sonatype.com/repository/maven-snapshots/</centralsnapshotsurl-->
+                        <!--centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl-->
                         <!-- browse: https://central.sonatype.com/service/rest/repository/browse/maven-snapshots/ -->
                     </configuration>
                 </plugin>
@@ -388,5 +388,16 @@
             </build>
         </profile>
     </profiles>
+
+    <!--distributionManagement>
+        <repository>
+            <id>central</id>
+            <url>https://central.sonatype.com/api/v1/publisher/deployments/</url>
+        </repository>
+        <snapshotRepository>
+            <id>central</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement-->
 
 </project>
