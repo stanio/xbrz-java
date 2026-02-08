@@ -1,7 +1,7 @@
 package io.github.stanio.xbrz;
 
 import static io.github.stanio.xbrz.BlendInfo.*;
-import static io.github.stanio.xbrz.BlendType.*;
+import static io.github.stanio.xbrz.GradientType.*;
 import static io.github.stanio.xbrz.RotationDegree.*;
 import static java.lang.Math.multiplyExact;
 
@@ -159,35 +159,35 @@ public class Xbrz {
     | F | G |   evaluate corner between F, G, J, K
     |---+---|   current input pixel is at position F
     | J | K |
-    ---------   F, G, J, K corners of "BlendType" */
+    ---------   F, G, J, K corners of "GradientType" */
     private void preProcessCorners(Kernel_4x4 ker, BlendResult result) {
         result.reset();
 
-        if ((ker.f == ker.g &&
-             ker.j == ker.k) ||
-            (ker.f == ker.j &&
-             ker.g == ker.k))
+        if ((ker.e == ker.f &&
+             ker.h == ker.i) ||
+            (ker.e == ker.h &&
+             ker.f == ker.i))
             return;
 
-        final double jg = dist(ker.i, ker.f) + dist(ker.f, ker.c) + dist(ker.n, ker.k) + dist(ker.k, ker.h) + cfg.centerDirectionBias * dist(ker.j, ker.g);
-        final double fk = dist(ker.e, ker.j) + dist(ker.j, ker.o) + dist(ker.b, ker.g) + dist(ker.g, ker.l) + cfg.centerDirectionBias * dist(ker.f, ker.k);
+        final double hf = dist(ker.g, ker.e) + dist(ker.e, ker.c) + dist(ker.k, ker.i) + dist(ker.i, ker.o) + cfg.centerDirectionBias * dist(ker.h, ker.f);
+        final double ei = dist(ker.d, ker.h) + dist(ker.h, ker.l) + dist(ker.b, ker.f) + dist(ker.f, ker.n) + cfg.centerDirectionBias * dist(ker.e, ker.i);
 
-        if (jg < fk)
+        if (hf < ei)
         {
-            final boolean dominantGradient = cfg.dominantDirectionThreshold * jg < fk;
-            if (ker.f != ker.g && ker.f != ker.j)
+            final boolean dominantGradient = cfg.dominantDirectionThreshold * hf < ei;
+            if (ker.e != ker.f && ker.e != ker.h)
                 result.blend_f = dominantGradient ? BLEND_DOMINANT : BLEND_NORMAL;
 
-            if (ker.k != ker.j && ker.k != ker.g)
+            if (ker.i != ker.h && ker.i != ker.f)
                 result.blend_k = dominantGradient ? BLEND_DOMINANT : BLEND_NORMAL;
         }
-        else if (fk < jg)
+        else if (ei < hf)
         {
-            final boolean dominantGradient = cfg.dominantDirectionThreshold * fk < jg;
-            if (ker.j != ker.f && ker.j != ker.k)
+            final boolean dominantGradient = cfg.dominantDirectionThreshold * ei < hf;
+            if (ker.h != ker.e && ker.h != ker.i)
                 result.blend_j = dominantGradient ? BLEND_DOMINANT : BLEND_NORMAL;
 
-            if (ker.g != ker.f && ker.g != ker.k)
+            if (ker.f != ker.e && ker.f != ker.i)
                 result.blend_g = dominantGradient ? BLEND_DOMINANT : BLEND_NORMAL;
         }
     }
@@ -298,7 +298,7 @@ public class Xbrz {
             for (int x = 0; x < srcWidth; ++x)
             {
                 ker4.shift();     //shift previous kernel to the left
-                ker4.readDhlp(x); // (x, yFirst - 1) is at position F
+                ker4.readPonm(x); // (x, yFirst - 1) is at position E
 
                 preProcessCorners(ker4, res);
                 addTopR(preProcBuf, x, res.blend_j); //set 2nd known corner for (x, yFirst)
@@ -328,7 +328,7 @@ public class Xbrz {
             for (int x = 0; x < srcWidth; ++x, out.incrementX())
             {
                 ker4.shift();     //shift previous kernel to the left
-                ker4.readDhlp(x); // (x, y) is at position F
+                ker4.readPonm(x); // (x, y) is at position E
 
                 //evaluate the four corners on bottom-right of current pixel
                 byte blend_xy = preProcBuf[x]; //for current (x, y) position
@@ -348,7 +348,7 @@ public class Xbrz {
                     }
                 }
 
-                out.fillBlock(ker4.f);
+                out.fillBlock(ker4.e);
 
                 //blend all four corners of current pixel
                 if (BlendInfo.blendingNeeded(blend_xy))
@@ -393,25 +393,21 @@ public class Xbrz {
 }
 
 
-/* input kernel area naming convention:
------------------
-| A | B | C | D |
-|---|---|---|---|
-| E | F | G | H |
-|---|---|---|---|   input pixel is at position F
-| I | J | K | L |
-|---|---|---|---|
-| M | N | O | P |
------------------
-*/
-final class Kernel_4x4 {
+/* input kernel for preprocessing step:
 
-    int
-    a, b, c, //
-    e, f, g, // support reinterpret_cast from Kernel_4x4 => Kernel_3x3
-    i, j, k, //
-    m, n, o,
-    d, h, l, p;
+    -----------------
+    | A | B | C | P |
+    |---|---|---|---|
+    | D | E | F | O |
+    |---|---|---|---|   input pixel is at position E
+    | G | H | I | N |
+    |---|---|---|---|
+    | J | K | L | M |
+    -----------------
+*/
+final class Kernel_4x4 extends Kernel_3x3 {
+
+    int j, k, l, m, n, o, p;
 
     private int[] src;
     private int srcWidth;
@@ -423,10 +419,7 @@ final class Kernel_4x4 {
     private int s_p1;
     private int s_p2;
 
-    private final Kernel_3x3 ker3;
-
     private Kernel_4x4() {
-        this.ker3 = new Kernel_3x3(this);
     }
 
     private static final ThreadLocal<Kernel_4x4> instance = new ThreadLocal<>();
@@ -445,7 +438,7 @@ final class Kernel_4x4 {
     }
 
     final Kernel_3x3 kernel_3x3() {
-        return ker3;
+        return this;
     }
 
     final void positionY(int y) {
@@ -455,25 +448,25 @@ final class Kernel_4x4 {
             positionYDuplicate(y);
         }
 
-        readDhlp(-4); //hack: read a, e, i, m at x = -1
-        a = d;
-        e = h;
-        i = l;
-        m = p;
+        readPonm(-4); //hack: read a, e, i, m at x = -1
+        a = p;
+        d = o;
+        g = n;
+        j = m;
 
-        readDhlp(-3);
-        b = d;
-        f = h;
-        j = l;
-        n = p;
+        readPonm(-3);
+        b = p;
+        e = o;
+        h = n;
+        k = m;
 
-        readDhlp(-2);
-        c = d;
-        g = h;
-        k = l;
-        o = p;
+        readPonm(-2);
+        c = p;
+        f = o;
+        i = n;
+        l = m;
 
-        readDhlp(-1);
+        readPonm(-1);
     }
 
     private final void positionYTransparent(int y) {
@@ -494,56 +487,56 @@ final class Kernel_4x4 {
         return (v < lo) ? lo : (v > hi) ? hi : v;
     }
 
-    final void readDhlp(int x) //(x, y) is at kernel position F
+    final void readPonm(int x) //(x, y) is at kernel position F
     {
         if (withAlpha) {
-            readDhlpTransparent(x);
+            readPonmTransparent(x);
         } else {
-            readDhlpDuplicate(x);
+            readPonmDuplicate(x);
         }
     }
 
-    private final void readDhlpTransparent(int x) {
+    private final void readPonmTransparent(int x) {
         final int x_p2 = x + 2;
         if (0 <= x_p2 && x_p2 < srcWidth)
         {
-            d = (s_m1 >= 0) ? src[s_m1 + x_p2] : 0;
-            h = (s_0  >= 0) ? src[s_0  + x_p2] : 0;
-            l = (s_p1 >= 0) ? src[s_p1 + x_p2] : 0;
-            p = (s_p2 >= 0) ? src[s_p2 + x_p2] : 0;
+            p = (s_m1 >= 0) ? src[s_m1 + x_p2] : 0;
+            o = (s_0  >= 0) ? src[s_0  + x_p2] : 0;
+            n = (s_p1 >= 0) ? src[s_p1 + x_p2] : 0;
+            m = (s_p2 >= 0) ? src[s_p2 + x_p2] : 0;
         }
         else
         {
-            d = 0;
-            h = 0;
-            l = 0;
             p = 0;
+            o = 0;
+            n = 0;
+            m = 0;
         }
     }
 
-    private final void readDhlpDuplicate(int x) {
+    private final void readPonmDuplicate(int x) {
         final int xc_p2 = clamp(x + 2, 0, srcWidth - 1);
-        d = src[s_m1 + xc_p2];
-        h = src[s_0  + xc_p2];
-        l = src[s_p1 + xc_p2];
-        p = src[s_p2 + xc_p2];
+        p = src[s_m1 + xc_p2];
+        o = src[s_0  + xc_p2];
+        n = src[s_p1 + xc_p2];
+        m = src[s_p2 + xc_p2];
     }
 
     final void shift() {
         a = b;    //shift kernel to the left
-        e = f;    // -----------------
-        i = j;    // | A | B | C | D |
-        m = n;    // |---|---|---|---|
-        /**/      // | E | F | G | H |
-        b = c;    // |---|---|---|---|
-        f = g;    // | I | J | K | L |
+        d = e;    // -----------------
+        g = h;    // | A | B | C | P |
         j = k;    // |---|---|---|---|
-        n = o;    // | M | N | O | P |
+        /**/      // | D | E | F | O |
+        b = c;    // |---|---|---|---|
+        e = f;    // | G | H | I | N |
+        h = i;    // |---|---|---|---|
+        k = l;    // | J | K | L | M |
         /**/      // -----------------
-        c = d;
-        g = h;
-        k = l;
-        o = p;
+        c = p;
+        f = o;
+        i = n;
+        l = m;
     }
 
     //@Override
@@ -570,89 +563,88 @@ final class Kernel_4x4 {
 | G | H | I |
 -------------
 */
-final class Kernel_3x3 {
+class Kernel_3x3 {
 
-    private final Kernel_4x4 ker4;
+    int
+    a, b, c,
+    d, e, f,
+    g, h, i;
 
     private RotationDegree rotDeg = ROT_0;
 
-    Kernel_3x3(Kernel_4x4 ker4) {
-        this.ker4 = ker4;
-    }
-
     final int a() {
         switch (rotDeg) {
-        default:      return ker4.a;
-        case ROT_90:  return ker4.i;
-        case ROT_180: return ker4.k;
-        case ROT_270: return ker4.c;
+        default:      return a;
+        case ROT_90:  return g;
+        case ROT_180: return i;
+        case ROT_270: return c;
         }
     }
 
     final int b() {
         switch (rotDeg) {
-        default:      return ker4.b;
-        case ROT_90:  return ker4.e;
-        case ROT_180: return ker4.j;
-        case ROT_270: return ker4.g;
+        default:      return b;
+        case ROT_90:  return d;
+        case ROT_180: return h;
+        case ROT_270: return f;
         }
     }
 
     final int c() {
         switch (rotDeg) {
-        default:      return ker4.c;
-        case ROT_90:  return ker4.a;
-        case ROT_180: return ker4.i;
-        case ROT_270: return ker4.k;
+        default:      return c;
+        case ROT_90:  return a;
+        case ROT_180: return g;
+        case ROT_270: return i;
         }
     }
 
     final int d() {
         switch (rotDeg) {
-        default:      return ker4.e;
-        case ROT_90:  return ker4.j;
-        case ROT_180: return ker4.g;
-        case ROT_270: return ker4.b;
+        default:      return d;
+        case ROT_90:  return h;
+        case ROT_180: return f;
+        case ROT_270: return b;
         }
     }
 
     final int e() {
-        return ker4.f; // center
+        return e; // center
     }
 
     final int f() {
         switch (rotDeg) {
-        default:      return ker4.g;
-        case ROT_90:  return ker4.b;
-        case ROT_180: return ker4.e;
-        case ROT_270: return ker4.j;
+        default:      return f;
+        case ROT_90:  return b;
+        case ROT_180: return d;
+        case ROT_270: return h;
         }
     }
 
     final int g() {
         switch (rotDeg) {
-        default:      return ker4.i;
-        case ROT_90:  return ker4.k;
-        case ROT_180: return ker4.c;
-        case ROT_270: return ker4.a;
+        default:      return g;
+        case ROT_90:  return i;
+        case ROT_180: return c;
+        case ROT_270: return a;
         }
     }
 
     final int h() {
         switch (rotDeg) {
-        default:      return ker4.j;
-        case ROT_90:  return ker4.g;
-        case ROT_180: return ker4.b;
-        case ROT_270: return ker4.e;
+        default:      return h;
+        case ROT_90:  return f;
+        case ROT_180: return b;
+        case ROT_270: return d;
         }
     }
 
     final int i() {
         switch (rotDeg) {
-        default:      return ker4.k;
-        case ROT_90:  return ker4.c;
-        case ROT_180: return ker4.a;
-        case ROT_270: return ker4.i;
+        default:      return i;
+        case ROT_90:  return c;
+        case ROT_180: return a;
+        case ROT_270: return g;
         }
     }
 
@@ -673,7 +665,7 @@ final class Kernel_3x3 {
 }
 
 
-final class BlendType {
+final class GradientType {
 
     static final byte BLEND_NONE = 0;
     static final byte BLEND_NORMAL = 1;   //a normal indication to blend
