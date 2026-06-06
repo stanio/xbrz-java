@@ -120,6 +120,7 @@ public abstract class AbstractScalerTest {
         for (int i = 0, len = refPixels.length; i < len; i++) {
             if (destPixels[i] != refPixels[i]) {
                 mismatch += 1;
+                System.out.printf("Diff: %08X, %08X%n", destPixels[i], refPixels[i]);
             }
         }
         double percent = mismatch * 100.0 / destPixels.length;
